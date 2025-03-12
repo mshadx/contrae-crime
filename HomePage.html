@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contra e-Crime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f7f7f7;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 290px;
+            background-color: #8B0000;
+            color: white;
+            padding: 20px;
+            height: 100vh; /* Full height */
+            position: fixed; /* Fixed sidebar */
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 50px 0; /* Increased margin for better spacing */
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px; /* Increased font size */
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px; /* Smaller width */
+            height: 30px; /* Smaller height */
+            margin-top: 340px; /* Space above the toggle */
+        }
+
+        .switch-label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #28292c;
+            border-radius: 25px;
+            cursor: pointer;
+            border: 3px solid #28292c;
+        }
+
+        .checkbox {
+            position: absolute;
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider {
+            background-color: #d8dbe0;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            top: 3px; /* Adjusted position */
+            left: 3px; /* Adjusted position */
+            width: 20px; /* Smaller circle */
+            height: 20px; /* Smaller circle */
+            border-radius: 50%;
+            box-shadow: inset 8px -3px 0px 0px #d8dbe0;
+            background-color: #28292c;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider::before {
+            transform: translateX(30px); /* Adjusted translation */
+            background-color: #28292c;
+            box-shadow: none;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 290px; /* Offset for the sidebar */
+            overflow-y: auto; /* Scrollable content */
+            height: 100vh; /* Full height */
+            transition: background-color 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px; /* Added margin for spacing */
+        }
+
+        .user-info {
+            margin-left: 1450px;
+            margin-bottom: 20px;
+            font-size: 20px; /* Increased font size */
+        }
+
+        .fingerprint-icon {
+            width: 150px;
+            height: 150px;
+            background: url('https://static.thenounproject.com/png/1238269-200.png') no-repeat center center;
+            background-size: contain;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fingerprint-icon::before {
+            content: "";
+            position: absolute;
+            margin-right: 4px;
+            margin-top: 4px;
+            width: 138px; /* Slightly larger than the icon */
+            height: 140px; /* Slightly larger than the icon */
+            border: 3px solid; /* Circle border */
+            border-radius: 50%; /* Make it circular */
+            z-index: 0;
+            color: #000000; /* Circle color remains black */
+        }
+
+        .search {
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .articles {
+            margin-top: 20px;
+            color: #000000; /* Default text color */
+        }
+
+        .articles h2 {
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 35px; /* Increased gap between cards */
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            --bg-card: #27272a;
+            --primary: #6d28d9;
+            --primary-800: #4c1d95;
+            --primary-shadow: #2e1065;
+            --light: #d9d9d9;
+            --zinc-800: #18181b;
+            --bg-linear: linear-gradient(0deg, var(--primary) 50%, var(--light) 125%);
+
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem;
+            width: 350px;
+            background-color: var(--bg-card);
+            border-radius: 1rem;
+            justify-content: space-between;
+        }
+
+        .image_container {
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            height: 200px; /* Adjusted image container height */
+            background-color: var(--primary-800);
+            border-radius: 0.5rem;
+        }
+
+        .image_container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the image covers the container */
+        }
+
+        .cybercrime-title {
+            overflow: clip;
+            width: 100%;
+            font-size: 1.2rem; /* Larger font size */
+            font-weight: 600;
+            color: var(--light);
+            text-transform: capitalize;
+            text-wrap: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .cybercrime-description {
+            font-size: 0.9rem;
+            color: var(--light);
+            line-height: 1.4;
+            text-align: justify; /* Add justified alignment */
+        }
+
+        body.dark-theme {
+            background-color: #28292c;
+            color: #d8dbe0;
+        }
+
+        .dark-theme .content {
+            background-color: #28292c;
+            color: #d8dbe0;
+        }
+
+        .dark-theme .articles {
+            color: #ffffff; /* Set text color to white in dark mode */
+        }
+
+        .dark-theme .articles h2 {
+            color: #ffffff; /* Ensure the heading is white in dark mode */
+        }
+
+        .dark-theme .card {
+            background-color: #3a3b3c; /* Dark mode card background */
+            color: #ffffff; /* Set text color to white in dark mode */
+        }
+
+        .dark-theme .cybercrime-title,
+        .dark-theme .cybercrime-description {
+            color: #ffffff; /* Ensure text inside cards is white in dark mode */
+        }
+
+        .dark-theme .search {
+            background-color: #3a3b3c;
+            color: #d8dbe0;
+            border-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h1>Contra E-Crime</h1>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">News & Insights</a></li>
+                <li><a href="#">Saved Laws</a></li>
+                <li><a href="#">Search History</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+           
+            <div class="toggle-switch">
+                <label class="switch-label">
+                    <input type="checkbox" class="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </nav>
+        <main class="content">
+            <div class="header">
+                <div class="user-info">
+                    <span>*Username*</span>
+                </div>
+                <div class="fingerprint-icon"></div>
+                <input type="text" class="search" placeholder="Ask anything........">
+                <p>Find the right law for you!</p>
+            </div>
+            <section class="articles">
+                <h2>TOP ARTICLES</h2>
+                <div class="cards-container">
+                    <!-- Card 1 -->
+                    <div class="card">
+                        <div class="image_container">
+                            <img src="https://static.toiimg.com/thumb/msid-117988403,width-1280,height-720,resizemode-4/117988403.jpg" alt="Cybercrime Image">
+                        </div>
+                        <div class="cybercrime-title">
+                            <span>Hacking</span>
+                        </div>
+                        <div class="cybercrime-description">
+                            <p>Cybercrime</p>
+                            <p>Introduced in 1995</p>
+                            <p>The crime of unauthorized access to private computers or networks and misuse of it either by shutting it down or tampering with the data stored or other illegal approaches.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="card">
+                        <div class="image_container">
+                            <img src="https://safeonline.security.vt.edu/content/safeonline_security_vt_edu/en/phishing/_jcr_content/article-image.transform/m-medium/image.jpeg" alt="Cybercrime Image">
+                        </div>
+                        <div class="cybercrime-title">
+                            <span>Phishing and Scam</span>
+                        </div>
+                        <div class="cybercrime-description">
+                            <p>Cybercrime</p>
+                            <p>Introduced in 1990</p>
+                            <p>A type of social engineering attack that targets the user and tricks them by sending fake messages and emails to get sensitive information about the user or trying to download malicious software and exploit it on the target system.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="card">
+                        <div class="image_container">
+                            <img src="https://gdprinformer.com/wp-content/uploads/2017/09/fraud-laptop.jpg" alt="Cybercrime Image">
+                        </div>
+                        <div class="cybercrime-title">
+                            <span>Internet Fraud</span>
+                        </div>
+                        <div class="cybercrime-description">
+                            <p>Cybercrime</p>
+                            <p>Introduced in 1994</p>
+                            <p>Makes use of the internet and it can be considered a general term that groups all of the crimes that happen over the internet like spam, banking frauds, theft of service, etc.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="card">
+                        <div class="image_container">
+                            <img src="https://riskonnect.com/wp-content/uploads/2024/09/Blog-Image-How-to-Lessen-the-Pain-of-Ransomware-Attacks-3.webp" alt="Cybercrime Image">
+                        </div>
+                        <div class="cybercrime-title">
+                            <span>Randomware Attack</span>
+                        </div>
+                        <div class="cybercrime-description">
+                            <p>Cybercrime</p>
+                            <p>Introduced in 1989</p>
+                            <p>A type of malware that has the capability to prevent users from accessing all of their personal data on the system by encrypting them and then asking for a random in order to give access to the encrypted data.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('change', function() {
+            body.classList.toggle('dark-theme');
+        });
+    </script>
+</body>
+</html>
