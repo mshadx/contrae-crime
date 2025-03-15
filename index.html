@@ -50,7 +50,7 @@
         }
 
         .text-typewriter {
-            font-size: 2.5em;
+            font-size: 2.5vw; /* Responsive font size */
             color: white;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
@@ -99,7 +99,8 @@
         }
 
         label {
-            margin-top: 10px;
+            display: block;
+            margin-top: 15px;
             font-weight: bold;
             color: #333;
         }
@@ -107,6 +108,7 @@
         .input-container {
             position: relative;
             width: 100%;
+            margin-top: 5px;
         }
 
         input[type="text"],
@@ -153,6 +155,7 @@
             font-size: 14px;
             font-weight: normal;
             margin-left: 5px;
+            margin-top: 10px;
             line-height: 18px;
         }
 
@@ -198,25 +201,85 @@
             background-color: #8B0000;
         }
 
-        @media (max-width:480px) {}
-
-        @media (max-width: 767px) {
-            .sidebar {
-                width: 100%; /* Full width for mobile */
-                position: static; /* Remove fixed positioning */
-                height: auto; /* Adjust height */
+        /* Media Queries for Responsive Design */
+        /* For small devices (phones, 320px to 480px) */
+        @media (min-width: 320px) and (max-width: 480px) {
+            .text-typewriter {
+                font-size: 4vw; /* Adjust font size for small devices */
             }
-            .content {
-                margin-left: 0; /* Remove margin for full-width content */
+
+            .website-logo {
+                width: 120px;
+            }
+
+            .logoname {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .login-btn {
+                padding: 10px 30px;
+                font-size: 16px;
             }
         }
 
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 290px; /* Full sidebar width for larger screens */
+        /* For medium devices (tablets, 481px to 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .text-typewriter {
+                font-size: 3.5vw; /* Adjust font size for tablets */
             }
-            .content {
-                margin-left: 290px; /* Adjust margin for full sidebar */
+
+            .website-logo {
+                width: 150px;
+            }
+
+            .logoname {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+        }
+
+        /* For large devices (laptops, 769px to 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .text-typewriter {
+                font-size: 3vw; /* Adjust font size for laptops */
+            }
+
+            .website-logo {
+                width: 200px;
+            }
+
+            .logoname {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+        }
+
+        /* For extra-large devices (desktops, 1025px and above) */
+        @media (min-width: 1025px) {
+            .text-typewriter {
+                font-size: 2.5vw; /* Adjust font size for desktops */
+            }
+
+            .website-logo {
+                width: 275px;
+            }
+
+            .logoname {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 32px;
             }
         }
     </style>
@@ -261,9 +324,6 @@
             </form>
         </div>
     </div>
-
-    <div class="loading-spinner" id="loadingSpinner"></div>
-
 
     <script>
         const togglePassword = document.querySelector('#togglePassword');
