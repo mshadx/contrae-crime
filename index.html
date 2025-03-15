@@ -50,7 +50,7 @@
         }
 
         .text-typewriter {
-            font-size: 2.5vw; /* Responsive font size */
+            font-size: 2vw;
             color: white;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
@@ -202,10 +202,58 @@
         }
 
         /* Media Queries for Responsive Design */
-        /* For small devices (phones, 320px to 480px) */
-        @media (min-width: 320px) and (max-width: 480px) {
+        @media (max-width: 1024px) {
             .text-typewriter {
-                font-size: 4vw; /* Adjust font size for small devices */
+                font-size: 3vw; /* Adjust font size for smaller screens */
+            }
+
+            .website-logo {
+                width: 200px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .logoname {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .background-image {
+                flex: 1;
+                height: 40vh;
+            }
+
+            .form-container {
+                flex: 1;
+                max-width: 100%;
+                padding: 40px 20px;
+            }
+
+            .text-typewriter {
+                font-size: 2.5vw; /* Adjust font size for tablets */
+            }
+
+            .website-logo {
+                width: 150px;
+                top: 10px;
+                left: 10px;
+            }
+        }
+
+        @media (min-width: 320px) and (max-width: 480px){
+            .text-typewriter {
+                font-size: 3vw; /* Adjust font size for mobile */
             }
 
             .website-logo {
@@ -223,63 +271,6 @@
             .login-btn {
                 padding: 10px 30px;
                 font-size: 16px;
-            }
-        }
-
-        /* For medium devices (tablets, 481px to 768px) */
-        @media (min-width: 481px) and (max-width: 768px) {
-            .text-typewriter {
-                font-size: 3.5vw; /* Adjust font size for tablets */
-            }
-
-            .website-logo {
-                width: 150px;
-            }
-
-            .logoname {
-                font-size: 28px;
-            }
-
-            h2 {
-                font-size: 24px;
-            }
-        }
-
-        /* For large devices (laptops, 769px to 1024px) */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .text-typewriter {
-                font-size: 3vw; /* Adjust font size for laptops */
-            }
-
-            .website-logo {
-                width: 200px;
-            }
-
-            .logoname {
-                font-size: 32px;
-            }
-
-            h2 {
-                font-size: 28px;
-            }
-        }
-
-        /* For extra-large devices (desktops, 1025px and above) */
-        @media (min-width: 1025px) {
-            .text-typewriter {
-                font-size: 2.5vw; /* Adjust font size for desktops */
-            }
-
-            .website-logo {
-                width: 275px;
-            }
-
-            .logoname {
-                font-size: 36px;
-            }
-
-            h2 {
-                font-size: 32px;
             }
         }
     </style>
