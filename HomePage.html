@@ -32,11 +32,17 @@
             padding: 20px;
             height: 100vh;
             position: fixed;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hide {
+            transform: translateY(-100%);
         }
 
         .sidebar h1 {
             text-align: center;
             margin-bottom: 30px;
+            font-size: 24px;
         }
 
         .sidebar ul {
@@ -60,7 +66,6 @@
         .sidebar ul li a img {
             width: 30px;
             height: 30px;
-           
         }
 
         .dark-theme-container {
@@ -189,6 +194,8 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             margin-bottom: 20px;
+            background-color: white;
+            color: black;
         }
 
         .articles {
@@ -291,16 +298,22 @@
             color: #ffffff;
         }
 
-        .dark-theme .search {
-            background-color: #3a3b3c;
-            color: #d8dbe0;
-            border-color: #555;
-        }
-
         /* Media Queries for Responsive Design */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 250px;
+            }
+
+            .sidebar h1 {
+                font-size: 22px;
+            }
+
+            .sidebar ul li a {
+                font-size: 16px;
+            }
+
+            .dark-theme-label {
+                font-size: 16px;
             }
 
             .content {
@@ -324,11 +337,15 @@
             }
 
             .sidebar h1 {
-                font-size: 24px;
+                font-size: 20px;
             }
 
             .sidebar ul li a {
-                font-size: 16px;
+                font-size: 14px;
+            }
+
+            .dark-theme-label {
+                font-size: 14px;
             }
 
             .content {
@@ -363,22 +380,38 @@
             .sidebar {
                 width: 100%;
                 height: auto;
-                position: relative;
+                position: fixed;
+                top: 0;
+                left: 0;
                 padding: 10px;
+                transform: translateY(0);
+                z-index: 1000;
+            }
+
+            .sidebar.hide {
+                transform: translateY(-100%);
             }
 
             .sidebar h1 {
-                font-size: 20px;
-                margin-bottom: 20px;
+                font-size: 18px;
             }
 
             .sidebar ul li {
                 margin: 20px 0;
             }
 
+            .sidebar ul li a {
+                font-size: 14px;
+            }
+
+            .dark-theme-label {
+                font-size: 14px;
+            }
+
             .content {
                 margin-left: 0;
                 padding: 10px;
+                margin-top: 60px; /* Add margin to prevent content from being hidden under the sidebar */
             }
 
             .user-info {
@@ -415,7 +448,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="News.html">
                         <img src="https://iili.io/3n05Yp2.png" alt="News & Insights">
                         News & Insights
                     </a>
@@ -545,9 +578,26 @@
     <script>
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
+        const sidebar = document.querySelector('.sidebar');
+
+        let lastScrollTop = 0;
 
         themeToggle.addEventListener('change', function() {
             body.classList.toggle('dark-theme');
+        });
+
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop) {
+                // Scrolling down
+                sidebar.classList.add('hide');
+            } else {
+                // Scrolling up
+                sidebar.classList.remove('hide');
+            }
+
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         });
     </script>
 </body>
