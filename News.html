@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contra e-Crime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f7f7f7;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 290px;
+            background-color: #8B0000;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 50px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar ul li a img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .dark-theme-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .dark-theme-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .dark-theme-label img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch-label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #28292c;
+            border-radius: 25px;
+            cursor: pointer;
+            border: 3px solid #28292c;
+        }
+
+        .checkbox {
+            position: absolute;
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider {
+            background-color: #d8dbe0;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            box-shadow: inset 8px -3px 0px 0px #d8dbe0;
+            background-color: #28292c;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider::before {
+            transform: translateX(30px);
+            background-color: #28292c;
+            box-shadow: none;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 290px;
+            overflow-y: auto;
+            height: 100vh;
+            transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trending-news {
+            margin-bottom: 20px;
+            color: #000000;
+            text-align: center;
+        }
+
+        .trending-news h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .trending-news p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .card {
+            --bg-card: #27272a;
+            --primary: #6d28d9;
+            --primary-800: #4c1d95;
+            --primary-shadow: #2e1065;
+            --light: #d9d9d9;
+            --zinc-800: #18181b;
+            --bg-linear: linear-gradient(0deg, var(--primary) 50%, var(--light) 125%);
+
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem;
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--bg-card);
+            border-radius: 1rem;
+            justify-content: space-between;
+        }
+
+        .image_container {
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            height: 400px;
+            background-color: var(--primary-800);
+            border-radius: 0.5rem;
+        }
+
+        .image_container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cybercrime-description {
+            font-size: 1rem;
+            color: var(--light);
+            line-height: 1.6;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        body.dark-theme {
+            background-color: #28292c;
+            color: #d8dbe0;
+        }
+
+        .dark-theme .content {
+            background-color: #28292c;
+            color: #d8dbe0;
+        }
+
+        .dark-theme .trending-news {
+            color: #ffffff;
+        }
+
+        .dark-theme .trending-news h2 {
+            color: #ffffff;
+        }
+
+        .dark-theme .trending-news p {
+            color: #d8dbe0;
+        }
+
+        .dark-theme .card {
+            background-color: #3a3b3c;
+            color: #ffffff;
+        }
+
+        .dark-theme .cybercrime-description {
+            color: #ffffff;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .sidebar h1 {
+                font-size: 22px;
+            }
+
+            .sidebar ul li a {
+                font-size: 16px;
+            }
+
+            .dark-theme-label {
+                font-size: 16px;
+            }
+
+            .content {
+                margin-left: 250px;
+            }
+
+            .card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                padding: 10px;
+            }
+
+            .sidebar h1 {
+                font-size: 20px;
+            }
+
+            .sidebar ul li a {
+                font-size: 14px;
+            }
+
+            .dark-theme-label {
+                font-size: 14px;
+            }
+
+            .content {
+                margin-left: 200px;
+                padding: 10px;
+            }
+
+            .card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 10px;
+            }
+
+            .sidebar h1 {
+                font-size: 18px;
+            }
+
+            .sidebar ul li {
+                margin: 20px 0;
+            }
+
+            .sidebar ul li a {
+                font-size: 14px;
+            }
+
+            .dark-theme-label {
+                font-size: 14px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h1>Contra E-Crime</h1>
+            <ul>
+                <li>
+                    <a href="HomePage.html">
+                        <img src="https://iili.io/3n05R2f.png" alt="Home">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="News.html">
+                        <img src="https://iili.io/3n05Yp2.png" alt="News & Insights">
+                        News & Insights
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://iili.io/3n05574.png" alt="Saved Laws">
+                        Saved Laws
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://iili.io/3n057kl.png" alt="Search History">
+                        Search History
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://iili.io/3n05cIS.png" alt="Contact Us">
+                        Contact Us
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://iili.io/3n05lh7.png" alt="About Us">
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://iili.io/3n050Q9.png" alt="Logout">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Dark Theme Container -->
+            <div class="dark-theme-container">
+                <div class="dark-theme-label">
+                    <img src="https://iili.io/3n05EBe.png" alt="Dark Theme">
+                    <span>Dark Theme</span>
+                </div>
+                <div class="toggle-switch">
+                    <label class="switch-label">
+                        <input type="checkbox" class="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+        <main class="content">
+            <div class="trending-news">
+                <h2>TRENDING CYBERCRIME NEWS</h2>
+            </div>
+            <div class="card">
+                <div class="image_container">
+                    <img src="https://media.philstar.com/photos/2023/12/01/4_2023-12-01_22-20-47.jpg" alt="Cybercrime Image">
+                </div>
+                <div class="cybercrime-description">
+                    <p>Cybercrime</p>
+                    <p>Cybercrime cases up 400 percent in 2023 - PNP</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('change', function() {
+            body.classList.toggle('dark-theme');
+        });
+    </script>
+</body>
+</html>
