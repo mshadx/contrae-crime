@@ -32,11 +32,6 @@
             padding: 20px;
             height: 100vh;
             position: fixed;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar.hide {
-            transform: translateY(-100%);
         }
 
         .sidebar h1 {
@@ -372,7 +367,7 @@
             }
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 480px) and (max-width: 482px){
             .container {
                 flex-direction: column;
             }
@@ -380,16 +375,8 @@
             .sidebar {
                 width: 100%;
                 height: auto;
-                position: fixed;
-                top: 0;
-                left: 0;
+                position: relative;
                 padding: 10px;
-                transform: translateY(0);
-                z-index: 1000;
-            }
-
-            .sidebar.hide {
-                transform: translateY(-100%);
             }
 
             .sidebar h1 {
@@ -411,7 +398,6 @@
             .content {
                 margin-left: 0;
                 padding: 10px;
-                margin-top: 60px; /* Add margin to prevent content from being hidden under the sidebar */
             }
 
             .user-info {
@@ -578,26 +564,9 @@
     <script>
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
-        const sidebar = document.querySelector('.sidebar');
-
-        let lastScrollTop = 0;
 
         themeToggle.addEventListener('change', function() {
             body.classList.toggle('dark-theme');
-        });
-
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (scrollTop > lastScrollTop) {
-                // Scrolling down
-                sidebar.classList.add('hide');
-            } else {
-                // Scrolling up
-                sidebar.classList.remove('hide');
-            }
-
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         });
     </script>
 </body>
