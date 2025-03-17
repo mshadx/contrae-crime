@@ -33,7 +33,6 @@
             height: 100vh;
             position: fixed;
             transition: transform 0.3s ease;
-            z-index: 1000;
         }
 
         .sidebar h1 {
@@ -143,7 +142,7 @@
             margin-left: 290px;
             overflow-y: auto;
             height: 100vh;
-            transition: background-color 0.3s ease, margin-left 0.3s ease;
+            transition: background-color 0.3s ease;
         }
 
         .header {
@@ -331,11 +330,6 @@
             .sidebar {
                 width: 200px;
                 padding: 10px;
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
             }
 
             .sidebar h1 {
@@ -351,7 +345,7 @@
             }
 
             .content {
-                margin-left: 0;
+                margin-left: 200px;
                 padding: 10px;
             }
 
@@ -372,23 +366,9 @@
             .search {
                 width: 90%;
             }
-
-            .menu-button {
-                display: block;
-                position: fixed;
-                top: 10px;
-                left: 10px;
-                background-color: #8B0000;
-                color: white;
-                border: none;
-                padding: 10px;
-                font-size: 20px;
-                cursor: pointer;
-                z-index: 1000;
-            }
         }
 
-        @media (min-width: 480px) and (max-width: 482px) {
+        @media (max-width: 480px) {
             .container {
                 flex-direction: column;
             }
@@ -398,6 +378,10 @@
                 height: auto;
                 position: relative;
                 padding: 10px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
                 transform: translateX(0);
             }
 
@@ -441,16 +425,29 @@
                 width: 100%;
                 max-width: 100%;
             }
+
+            .menu-icon {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                font-size: 24px;
+                color: #8B0000;
+                cursor: pointer;
+                z-index: 1000;
+            }
         }
 
-        .menu-button {
+        .menu-icon {
             display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <button class="menu-button" id="menuButton">☰</button>
+        <div class="menu-icon" id="menuIcon">
+            <i class="fas fa-bars"></i>
+        </div>
         <nav class="sidebar" id="sidebar">
             <h1>Contra E-Crime</h1>
             <ul>
@@ -591,15 +588,14 @@
     <script>
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
+        const menuIcon = document.getElementById('menuIcon');
+        const sidebar = document.getElementById('sidebar');
 
         themeToggle.addEventListener('change', function() {
             body.classList.toggle('dark-theme');
         });
 
-        const menuButton = document.getElementById('menuButton');
-        const sidebar = document.getElementById('sidebar');
-
-        menuButton.addEventListener('click', function() {
+        menuIcon.addEventListener('click', function() {
             sidebar.classList.toggle('active');
         });
     </script>
