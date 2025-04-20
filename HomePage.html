@@ -59,6 +59,35 @@
             gap: 10px;
         }
 
+        .sidebar ul li a:not(.dark-theme-label a) {
+            transition: all 0.3s ease;
+            position: relative;
+}
+
+        .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c; 
+            transform: translateX(5px);
+}
+
+        .sidebar ul li a:not(.dark-theme-label a)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -10px;
+            left: 0;
+            background-color: #d7b15c;
+            transition: width 0.3s ease;
+}
+
+        .sidebar ul li a:not(.dark-theme-label a):hover::after {
+            width: 95%;
+}
+
+        .dark-theme .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c;
+}
+
         .sidebar ul li a img {
             width: 30px;
             height: 30px;
