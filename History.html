@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contra e-Crime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f7f7f7;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .dark-theme .loader {
+            border-color: #d7b15c;
+            border-bottom-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 290px;
+            background-color: #8B0000;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 50px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar ul li a img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a) {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c; 
+            transform: translateX(5px);
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -10px;
+            left: 0;
+            background-color: #d7b15c;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a):hover::after {
+            width: 95%;
+        }
+
+        .dark-theme .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c;
+        }
+
+        .dark-theme-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .dark-theme-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .dark-theme-label img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch-label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #28292c;
+            border-radius: 25px;
+            cursor: pointer;
+            border: 3px solid #28292c;
+        }
+
+        .checkbox {
+            position: absolute;
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider {
+            background-color: #d8dbe0;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            box-shadow: inset 8px -3px 0px 0px #d8dbe0;
+            background-color: #28292c;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider::before {
+            transform: translateX(30px);
+            background-color: #28292c;
+            box-shadow: none;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 290px;
+            padding: 30px;
+            position: relative;
+            background: url('https://via.placeholder.com/1920x1080?text=Cityscape+Background') no-repeat center center;
+            background-size: cover;
+            transition: background-color 0.3s ease, margin-left 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(247, 247, 247, 0.9);
+            z-index: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .main-image {
+            max-width: 80%;
+            max-height: 80%;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .main-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .content {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .content::before {
+            background-color: rgba(18, 18, 18, 0.9);
+        }
+
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+            display: none;
+            background-color: #8B0000;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .mobile-nav .logo {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .mobile-nav .menu-icon {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .sidebar h1 {
+                font-size: 22px;
+            }
+
+            .sidebar ul li a {
+                font-size: 16px;
+            }
+
+            .dark-theme-label {
+                font-size: 16px;
+            }
+
+            .content {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                padding: 10px;
+            }
+
+            .sidebar h1 {
+                font-size: 20px;
+            }
+
+            .sidebar ul li a {
+                font-size: 14px;
+            }
+
+            .dark-theme-label {
+                font-size: 14px;
+            }
+
+            .content {
+                margin-left: 200px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                padding: 10px;
+                transform: translateX(-100%);
+                z-index: 999;
+                top: 60px;
+                height: calc(100vh - 60px);
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar h1 {
+                display: none;
+            }
+
+            .sidebar ul li {
+                margin: 20px 0;
+            }
+
+            .sidebar ul li a {
+                font-size: 16px;
+            }
+
+            .dark-theme-label {
+                font-size: 16px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 80px 15px 15px;
+            }
+
+            .main-image {
+                max-width: 100%;
+                margin-top: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader"></div>
+    </div>
+    <!-- Mobile Navigation Bar -->
+    <div class="mobile-nav">
+        <a href="#" class="logo">Contra e-Laws</a>
+        <div class="menu-icon" id="mobileMenuIcon">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <h1>Contra E-Crime</h1>
+            <ul>
+                <li>
+                    <a href="HomePage.html">
+                        <img src="https://iili.io/3n05R2f.png" alt="Home">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="News.html">
+                        <img src="https://iili.io/3n05Yp2.png" alt="News & Insights">
+                        News & Insights
+                    </a>
+                </li>
+                <li>
+                    <a href="SavedLaws.html">
+                        <img src="https://iili.io/3n05574.png" alt="Saved Laws">
+                        Saved Laws
+                    </a>
+                </li>
+                <li>
+                    <a href="History.html">
+                        <img src="https://iili.io/3n057kl.png" alt="Search History">
+                        Search History
+                    </a>
+                </li>
+                <li>
+                    <a href="ContactUs.html">
+                        <img src="https://iili.io/3n05cIS.png" alt="Contact Us">
+                        Contact Us
+                    </a>
+                </li>
+                <li>
+                    <a href="AboutUs.html">
+                        <img src="https://iili.io/3n05lh7.png" alt="About Us">
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html">
+                        <img src="https://iili.io/3n050Q9.png" alt="Logout">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+            <div class="dark-theme-container">
+                <div class="dark-theme-label">
+                    <img src="https://iili.io/3n05EBe.png" alt="Dark Theme">
+                    <span>Dark Theme</span>
+                </div>
+                <div class="toggle-switch">
+                    <label class="switch-label">
+                        <input type="checkbox" class="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+        <main class="content">
+            <img src="https://i.imgur.com/DxNf9ES.png" alt="Contra E-Crime" class="main-image">
+        </main>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+        const sidebar = document.getElementById('sidebar');
+        const loaderOverlay = document.getElementById('loaderOverlay');
+
+        if (localStorage.getItem('darkTheme') === 'enabled') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('darkTheme', 'enabled');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('darkTheme', 'disabled');
+            }
+        });
+
+        mobileMenuIcon.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            const icon = mobileMenuIcon.querySelector('i');
+            if (sidebar.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        document.querySelectorAll('a[href]').forEach(link => {
+            if (link.href && !link.href.startsWith('javascript:') && !link.href.startsWith('#')) {
+                link.addEventListener('click', function(e) {
+
+                    if (!this.href.includes(window.location.hostname)) return;
+                    
+                    e.preventDefault();
+                    loaderOverlay.classList.add('active');
+                    
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 150);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

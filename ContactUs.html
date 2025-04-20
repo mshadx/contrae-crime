@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contra e-Crime - Contact Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f7f7f7;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .dark-theme .loader {
+            border-color: #d7b15c;
+            border-bottom-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 290px;
+            background-color: #8B0000;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 50px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar ul li a img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a) {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c; 
+            transform: translateX(5px);
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -10px;
+            left: 0;
+            background-color: #d7b15c;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a):hover::after {
+            width: 95%;
+        }
+
+        .dark-theme .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c;
+        }
+
+        .dark-theme-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .dark-theme-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .dark-theme-label img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch-label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #28292c;
+            border-radius: 25px;
+            cursor: pointer;
+            border: 3px solid #28292c;
+        }
+
+        .checkbox {
+            position: absolute;
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider {
+            background-color: #d8dbe0;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            box-shadow: inset 8px -3px 0px 0px #d8dbe0;
+            background-color: #28292c;
+            transition: 0.3s;
+        }
+
+        .checkbox:checked ~ .slider::before {
+            transform: translateX(30px);
+            background-color: #28292c;
+            box-shadow: none;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 290px;
+            padding: 30px;
+            position: relative;
+            background-color: #f7f7f7;
+            transition: background-color 0.3s ease, margin-left 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contact-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-header h2 {
+            font-size: 32px;
+            color: #8B0000;
+            margin-bottom: 10px;
+        }
+
+        .contact-header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .contact-details {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .contact-details h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-item i {
+            font-size: 20px;
+            color: #8B0000;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .contact-item span {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #8B0000;
+            outline: none;
+        }
+
+        .send-btn {
+            background-color: #8B0000;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .send-btn:hover {
+            background-color: #6d0000;
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .content {
+            background-color: #121212;
+        }
+
+        body.dark-theme .contact-container {
+            background-color: #1e1e1e;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .contact-header h2 {
+            color: #d7b15c;
+        }
+
+        body.dark-theme .contact-header p,
+        body.dark-theme .contact-details h3,
+        body.dark-theme .form-group label {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .contact-item span,
+        body.dark-theme .contact-item i {
+            color: #b0b0b0;
+        }
+
+        body.dark-theme .form-group input,
+        body.dark-theme .form-group textarea {
+            background-color: #2d2d2d;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .send-btn {
+            background-color: #d7b15c;
+            color: #121212;
+        }
+
+        body.dark-theme .send-btn:hover {
+            background-color: #c19d4f;
+        }
+
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+            display: none;
+            background-color: #8B0000;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .mobile-nav .logo {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .mobile-nav .menu-icon {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .sidebar h1 {
+                font-size: 22px;
+            }
+
+            .sidebar ul li a {
+                font-size: 16px;
+            }
+
+            .dark-theme-label {
+                font-size: 16px;
+            }
+
+            .content {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                padding: 10px;
+            }
+
+            .sidebar h1 {
+                font-size: 20px;
+            }
+
+            .sidebar ul li a {
+                font-size: 14px;
+            }
+
+            .dark-theme-label {
+                font-size: 14px;
+            }
+
+            .content {
+                margin-left: 200px;
+                padding: 20px;
+            }
+
+            .contact-container {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                padding: 10px;
+                transform: translateX(-100%);
+                z-index: 999;
+                top: 60px;
+                height: calc(100vh - 60px);
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar h1 {
+                display: none;
+            }
+
+            .sidebar ul li {
+                margin: 20px 0;
+            }
+
+            .sidebar ul li a {
+                font-size: 16px;
+            }
+
+            .dark-theme-label {
+                font-size: 16px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 80px 15px 15px;
+            }
+
+            .contact-container {
+                padding: 20px;
+            }
+
+            .contact-header h2 {
+                font-size: 28px;
+            }
+
+            .contact-header p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader"></div>
+    </div>
+    <!-- Mobile Navigation Bar -->
+    <div class="mobile-nav">
+        <a href="#" class="logo">Contra e-Laws</a>
+        <div class="menu-icon" id="mobileMenuIcon">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <h1>Contra E-Crime</h1>
+            <ul>
+                <li>
+                    <a href="HomePage.html">
+                        <img src="https://iili.io/3n05R2f.png" alt="Home">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="News.html">
+                        <img src="https://iili.io/3n05Yp2.png" alt="News & Insights">
+                        News & Insights
+                    </a>
+                </li>
+                <li>
+                    <a href="SavedLaws.html">
+                        <img src="https://iili.io/3n05574.png" alt="Saved Laws">
+                        Saved Laws
+                    </a>
+                </li>
+                <li>
+                    <a href="History.html">
+                        <img src="https://iili.io/3n057kl.png" alt="Search History">
+                        Search History
+                    </a>
+                </li>
+                <li>
+                    <a href="ContactUs.html">
+                        <img src="https://iili.io/3n05cIS.png" alt="Contact Us">
+                        Contact Us
+                    </a>
+                </li>
+                <li>
+                    <a href="AboutUs.html">
+                        <img src="https://iili.io/3n05lh7.png" alt="About Us">
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html">
+                        <img src="https://iili.io/3n050Q9.png" alt="Logout">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+            <div class="dark-theme-container">
+                <div class="dark-theme-label">
+                    <img src="https://iili.io/3n05EBe.png" alt="Dark Theme">
+                    <span>Dark Theme</span>
+                </div>
+                <div class="toggle-switch">
+                    <label class="switch-label">
+                        <input type="checkbox" class="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+        <main class="content">
+            <div class="contact-container">
+                <div class="contact-header">
+                    <h2>CONTACT US</h2>
+                    <p>We're here to help you!</p>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="contact-details">
+                        <h3>Contact Information</h3>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+63 936 365 4043</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-globe"></i>
+                            <span>www.contraccrime.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>cc.contraccrime@gmail.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Regalado Hwy, Novaliches, Quezon City, Metro Manila</span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h3>Send Us a Message</h3>
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-Mail</label>
+                                <input type="email" id="email" placeholder="Your Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" placeholder="Your Phone Number">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" placeholder="Your Message"></textarea>
+                            </div>
+                            <button type="submit" class="send-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+        const sidebar = document.getElementById('sidebar');
+        const loaderOverlay = document.getElementById('loaderOverlay');
+
+        if (localStorage.getItem('darkTheme') === 'enabled') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('darkTheme', 'enabled');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('darkTheme', 'disabled');
+            }
+        });
+
+        mobileMenuIcon.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            const icon = mobileMenuIcon.querySelector('i');
+            if (sidebar.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        document.querySelectorAll('a[href]').forEach(link => {
+            if (link.href && !link.href.startsWith('javascript:') && !link.href.startsWith('#')) {
+                link.addEventListener('click', function(e) {
+
+                    if (!this.href.includes(window.location.hostname)) return;
+                    
+                    e.preventDefault();
+                    loaderOverlay.classList.add('active');
+                    
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 150);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
