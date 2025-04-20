@@ -12,13 +12,74 @@
         }
 
         body, html {
-            height: 100%;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
             background-color: #f7f7f7;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.loader-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.fingerprint-loader {
+    width: 150px;
+    height: 150px;
+    background: url('https://static.thenounproject.com/png/1238269-200.png') no-repeat center center;
+    background-size: contain;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.fingerprint-loader::before {
+    content: "";
+    position: absolute;
+    width: 138px;
+    height: 140px;
+    border: 3px solid;
+    border-radius: 50%;
+    z-index: 0;
+    color: #ffffff;
+    animation: pulseBorder 1.5s infinite ease-in-out;
+}
+
+.dark-theme .fingerprint-loader::before {
+    color: #d7b15c;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulseBorder {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
 
         .container {
             display: flex;
@@ -32,6 +93,7 @@
             padding: 20px;
             height: 100vh;
             position: fixed;
+            transition: transform 0.3s ease;
         }
 
         .sidebar h1 {
@@ -62,6 +124,36 @@
             width: 30px;
             height: 30px;
         }
+
+        .sidebar ul li a:not(.dark-theme-label a) {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c; 
+            transform: translateX(5px);
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -10px;
+            left: 0;
+            background-color: #d7b15c;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar ul li a:not(.dark-theme-label a):hover::after {
+            width: 95%;
+        }
+
+        .dark-theme .sidebar ul li a:not(.dark-theme-label a):hover {
+            color: #d7b15c;
+        }
+
 
         .dark-theme-container {
             display: flex;
@@ -137,108 +229,204 @@
 
         .content {
             flex: 1;
-            padding: 20px;
             margin-left: 290px;
-            overflow-y: auto;
-            height: 100vh;
-            transition: background-color 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .trending-news {
-            margin-bottom: 20px;
-            color: #000000;
-            text-align: center;
-        }
-
-        .trending-news h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .trending-news p {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .card {
-            --bg-card: #27272a;
-            --primary: #6d28d9;
-            --primary-800: #4c1d95;
-            --primary-shadow: #2e1065;
-            --light: #d9d9d9;
-            --zinc-800: #18181b;
-            --bg-linear: linear-gradient(0deg, var(--primary) 50%, var(--light) 125%);
-
+            padding: 30px;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            padding: 1rem;
-            width: 100%;
-            max-width: 800px;
-            background-color: var(--bg-card);
-            border-radius: 1rem;
-            justify-content: space-between;
+            background: url('https://via.placeholder.com/1920x1080?text=Cityscape+Background') no-repeat center center;
+            background-size: cover;
+            transition: background-color 0.3s ease, margin-left 0.3s ease;
         }
 
-        .image_container {
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            z-index: 5;
-            width: 100%;
-            height: 400px;
-            background-color: var(--primary-800);
-            border-radius: 0.5rem;
-        }
-
-        .image_container img {
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background-color: rgba(247, 247, 247, 0.9);
+            z-index: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .news-section {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .news-section h1 {
+            font-size: 60px;
+            color: #333;
+            text-transform: uppercase;
+            margin-top: 80px;
+            transition: color 0.3s ease;
+        }
+
+        .news-section p.tagline {
+            font-size: 22px;
+            color: #666;
+            margin-bottom: 50px;
+            transition: color 0.3s ease;
+        }
+
+        .news-item {
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .news-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .news-image {
+            width: 150px;
+            height: 100px;
             object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
         }
 
-        .cybercrime-description {
-            font-size: 1rem;
-            color: var(--light);
+        .news-title {
+            flex: 1;
+        }
+
+        .news-title h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .news-meta {
+            font-size: 14px;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-icon {
+            font-size: 18px;
+            color: #8B0000;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .toggle-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .news-details {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 15px;
+            transition: max-height 0.5s ease, padding 0.5s ease, background-color 0.3s ease;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+
+        .news-details.active {
+            max-height: 1000px;
+            padding: 15px;
+        }
+
+        .news-details p {
+            font-size: 16px;
+            color: #333;
             line-height: 1.6;
-            text-align: center;
-            margin-top: 10px;
+            text-align: justify;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
         }
 
+        .news-details a {
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .news-details a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark Theme Styles */
         body.dark-theme {
-            background-color: #28292c;
-            color: #d8dbe0;
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
-        .dark-theme .content {
-            background-color: #28292c;
-            color: #d8dbe0;
+        body.dark-theme .content {
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
-        .dark-theme .trending-news {
-            color: #ffffff;
+        body.dark-theme .content::before {
+            background-color: rgba(18, 18, 18, 0.9);
         }
 
-        .dark-theme .trending-news h2 {
-            color: #ffffff;
+        body.dark-theme .news-section h1,
+        body.dark-theme .news-title h2,
+        body.dark-theme .news-details p {
+            color: #e0e0e0;
         }
 
-        .dark-theme .trending-news p {
-            color: #d8dbe0;
+        body.dark-theme .news-section p.tagline,
+        body.dark-theme .news-meta {
+            color: #b0b0b0;
         }
 
-        .dark-theme .card {
-            background-color: #3a3b3c;
-            color: #ffffff;
+        body.dark-theme .news-item {
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .dark-theme .cybercrime-description {
-            color: #ffffff;
+        body.dark-theme .news-details {
+            background-color: #252525;
+            border-top: 1px solid #333;
+        }
+
+        body.dark-theme .toggle-icon {
+            color: #ff6b6b;
+        }
+
+        body.dark-theme .news-details a {
+            color: #ff6b6b;
+        }
+
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+            display: none;
+            background-color: #8B0000;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .mobile-nav .logo {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .mobile-nav .menu-icon {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 15px;
         }
 
         /* Media Queries for Responsive Design */
@@ -263,8 +451,12 @@
                 margin-left: 250px;
             }
 
-            .card {
-                width: 100%;
+            .news-section h1 {
+                font-size: 48px;
+            }
+
+            .news-section p.tagline {
+                font-size: 18px;
             }
         }
 
@@ -291,25 +483,46 @@
                 padding: 10px;
             }
 
-            .card {
+            .news-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .news-image {
                 width: 100%;
+                height: 150px;
+                margin-right: 0;
+                margin-bottom: 10px;
             }
         }
 
-        @media (min-width: 480px) and (max-width: 482px) {
+        @media (max-width: 480px) {
             .container {
                 flex-direction: column;
+            }
+
+            .mobile-nav {
+                display: block;
             }
 
             .sidebar {
                 width: 100%;
                 height: auto;
-                position: relative;
+                position: fixed;
                 padding: 10px;
+                transform: translateX(-100%);
+                z-index: 999;
+                top: 60px;
+                height: calc(100vh - 60px);
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
             }
 
             .sidebar h1 {
-                font-size: 18px;
+                display: none;
             }
 
             .sidebar ul li {
@@ -317,27 +530,46 @@
             }
 
             .sidebar ul li a {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .dark-theme-label {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .content {
                 margin-left: 0;
-                padding: 10px;
+                padding: 80px 15px 15px;
             }
 
-            .card {
-                width: 100%;
+            .header {
+                justify-content: center;
+            }
+
+            .news-section h1 {
+                font-size: 36px;
+            }
+
+            .news-section p.tagline {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader"></div>
+    </div>
+    <!-- Mobile Navigation Bar -->
+    <div class="mobile-nav">
+        <a href="#" class="logo">Contra e-Laws</a>
+        <div class="menu-icon" id="mobileMenuIcon">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+
     <div class="container">
-        <nav class="sidebar">
+        <nav class="sidebar" id="sidebar">
             <h1>Contra E-Crime</h1>
             <ul>
                 <li>
@@ -353,38 +585,37 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="SavedLaws.html">
                         <img src="https://iili.io/3n05574.png" alt="Saved Laws">
                         Saved Laws
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="History.html">
                         <img src="https://iili.io/3n057kl.png" alt="Search History">
                         Search History
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="ContactUs.html">
                         <img src="https://iili.io/3n05cIS.png" alt="Contact Us">
                         Contact Us
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="AboutUs.html">
                         <img src="https://iili.io/3n05lh7.png" alt="About Us">
                         About Us
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="index.html">
                         <img src="https://iili.io/3n050Q9.png" alt="Logout">
                         Logout
                     </a>
                 </li>
             </ul>
 
-            <!-- Dark Theme Container -->
             <div class="dark-theme-container">
                 <div class="dark-theme-label">
                     <img src="https://iili.io/3n05EBe.png" alt="Dark Theme">
@@ -399,28 +630,292 @@
             </div>
         </nav>
         <main class="content">
-            <div class="trending-news">
-                <h2>TRENDING CYBERCRIME NEWS</h2>
-            </div>
-            <div class="card">
-                <div class="image_container">
-                    <img src="https://media.philstar.com/photos/2023/12/01/4_2023-12-01_22-20-47.jpg" alt="Cybercrime Image">
+            <section class="news-section">
+                <h1>
+                    TRENDING CYBERCRIME NEWS <img src="https://i.imgur.com/VStcaPo.png" alt="Logo" style="width: 200px; height: 200px; vertical-align: middle; margin-right: 10px;">
+                </h1>
+                <p class="tagline">Stay updated with the latest in cybercrime</p>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://od2-image-api.abs-cbn.com/prod/2025041608048/9e80e1ba82e2cb61282f70495a648388ce7198356dfaed65f77628d465429e35.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>Cybercrime council eyes task force against online and text scams</h2>
+                            <div class="news-meta">Pia Gutierrez - ABS-CBN News | April 16, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA – The Cybercrime Investigation Coordination Council (CICC) is considering forming a dedicated task force to go after online and text scammers, an official said Wednesday.</p>
+                        <p>Department of Information and Communications Technology (DICT) Assistant Secretary Renato Paraiso said the council would meet later in the day to discuss the plan.</p>
+                        <p>“We're strengthening the CICC in terms of investigation and apprehension. The council, led by the DICT Secretary and joined by other agencies, will meet today to discuss forming a task force to crack down on online and text scams,” Paraiso said in a televised interview.</p>
+                        <p>He also said the CICC is enhancing its Inter-Agency Response Center (I-ARC) Hotline 1326, where the public can report online scam incidents.</p>
+                        <p>According to Paraiso, while the SIM Card Registration Act has helped discourage text scams by removing anonymity, many scammers have adapted by shifting to online messaging apps that don't require SIM registration.</p>
+                        <p>“The SIM card registration removed their anonymity, but scammers have adapted. They no longer use calls or texts. They've moved to internet-based services like Viber and Messenger, which don't require valid SIM cards,” he said.</p>
+                        <p>Paraiso reminded the public to stay alert for online scams, avoid clicking suspicious links, and never share one-time passwords (OTPs), which scammers can use to access financial accounts and records.</p>
+
+                        <a href="https://www.abs-cbn.com/news/business/2025/4/16/cybercrime-council-studying-task-force-against-online-and-text-scams-1509" target="_blank">Read more</a>
+                    </div>
                 </div>
-                <div class="cybercrime-description">
-                    <p>Cybercrime</p>
-                    <p>Cybercrime cases up 400 percent in 2023 - PNP</p>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://media.philstar.com/photos/2025/03/18/fake_2025-03-18_23-29-47.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>How is 'fake news' punishable by law? Anti-cybercrime officers explain</h2>
+                            <div class="news-meta">Dominique Nicole Flores – Philstar.com | March 21, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>During the third House Tri-Committee hearing on Friday, March 21, Rep. Zia Alonto Adiong (Lanao del Sur, 1st District) asked government agencies responsible for investigating false information on social media to explain how an ordinary citizen can report and navigate the process.</p>
+                        <p>Agencies with this capability include the National Bureau of Investigation (NBI), the PNP Anti-Cybercrime Group (PNP-ACG) and the Department of Information and Communications Technology (DICT).</p>
+                        <p>Many are familiar with the Cybercrime Prevention Act of 2012 (Republic Act 10175), which penalizes online libel — defamatory statements made through digital platforms — under Article 355 of the Revised Penal Code.</p>
+                        <p>However, police colonel Andres Simbajon Jr., deputy director for administration of the PNP-ACG, told the committee that "fake news" can still be legally addressed, as it is classified as a crime under the Revised Penal Code.</p>
+                        <p>One in particular is Article 154, which penalizes the "unlawful use of means of publication and unlawful utterances."</p>
+                        <p>The Revised Penal Code prescribes a penalty of arresto mayor — imprisonment ranging from one month and one day to six months — for unlawful publication of false information. This comes with an additional fine ranging from P40,000 to P200,000.</p>
+                        <p>Police lieutenant colonel Anacleto Daliva, assistant chief of the PNP-ACG's legal affairs division, explained that false information can also be penalized under the Cybercrime Prevention Act through Section 6, which covers crimes under the Revised Penal Code and special laws when committed through a computer system.</p>
+                        <p>Meanwhile, core cybercrimes such as libel and online fraud fall under Section 4. "These are crimes where perpetrators use IT equipment, such as a cellphone or computer," Daliva said.</p>
+                        <a href="https://www.philstar.com/headlines/2025/03/21/2430091/how-fake-news-punishable-law-anti-cybercrime-officers-explain" target="_blank">Read more</a>
+                    </div>
                 </div>
-            </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://radyopilipinas.ph/wp-content/uploads/2023/09/Digital-Wallet-Security-Updates-How-to-Report-a-Cybercrime-to-PNP-ACG.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>ACG nabs 126 for cybercrimes</h2>
+                            <div class="news-meta">Emmanuel Tupas - The Philippine Star | March 19, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA, Philippines — Up to 126 people were arrested across the country in February for cybercrimes, the police Anti-Cybercrime Group reported yesterday.</p>
+                        <p>ACG director Brig. Gen. Bernard Yang said the figure is higher by 240.54 percent compared to the 37 people arrested in January.</p>
+                        <p>The suspects were apprehended in 132 law enforcement operations nationwide. Seven victims were rescued, the ACG said.</p>
+                        <p>Two other suspects, who are minors, were placed under the custody of social welfare officers.</p>
+                        <p>"The ACG remains steadfast in its commitment to enhancing efforts to combat cybercrime and ensure that criminals online are brought to justice," Yang said in a statement.</p>
+                        <p>He said 75 suspects were arrested in entrapment operations. Seven others were nabbed through the implementation of warrants to search, seize and examine computer data and 44 in the implementation of warrants of arrest.</p>
+                        <p>The top five offenses committed by the suspects are estafa, grave coercion, libel, violation of Republic Act 11934, the Subscriber Identity Module Registration Act, and RA 12010 or the Anti-Financial Account Scamming Act.</p>
+                        <p>Yang urged the public to report to authorities people who are involved in cybercrimes.</p>
+                        <a href="https://www.philstar.com/nation/2025/03/19/2429397/acg-nabs-126-cybercrimes?fbclid=IwY2xjawJQnzpleHRuA2FlbQIxMAABHX_69CAyo9IM6J6GvZkki-ccpgRoBcqpiKdKnNytIovBZoZMv3hiU6g04w_aem_ef1xmZ7tZsQM8pvy7v06fQ" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://files01.pna.gov.ph/category-list/2022/07/11/doj-seal.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>DOJ, UNODC link up for capacity building vs. cybercrime</h2>
+                            <div class="news-meta">Benjamin Pulta - Philippine News Agency | February 13, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA – The Department of Justice's Office of Cybercrime and the United Nations Office on Drugs and Crime (UNODC) are in talks to collaborate in various projects to strengthen criminal justice, especially on the intensified enforcement of cybercrime laws in the Philippines.</p>
+                        <p>In a news release on Thursday, the DOJ said among the activities that the two agencies intend to undertake is increasing the government's pool of digital forensic experts and boosting their capacities of cybercrime investigators and prosecutors.</p>
+                        <p>DOJ Secretary Jesus Crispin Remulla highlighted this need due to the steady increase in cybercrimes and cyber-enabled offenses or incidents in the country.</p>
+                        <p>To negotiate on the details of this partnership, Remulla will be leading a small delegation of DOJ officials to the UNODC headquarters in Vienna, Austria to sit down with its Executive Director, Ghada Fathi Waly.</p>
+                        <p>The delegation will also visit UNODC's Crime Laboratory.</p>
+                        <p>The meeting and visit will be conducted on the sidelines of the 68th Session of the UN Commission on Narcotic Drugs on March 10 to 14.</p>
+                        <p>The DOJ said the activities are in line with the Marcos administration's commitment to human rights and the rule of law.</p>
+                        <p>Meanwhile, Undersecretary Jesse Hermogenes Andres, head of DOJ's Law Enforcement Cluster, is leading the conversations with UNODC's team in the Philippines.</p>
+                        <p>Andres said he envisions to institutionalize the government's ability to procure and utilize the necessary digital forensic tools and software applications used in cybercrime investigations.</p>
+                        <p>He said funding for the renewal of licenses of these important investigative tools must always be given priority.</p>
+                        <p>The DOJ and the UNODC are looking at signing a comprehensive memorandum of agreement to cover the various justice sector programs, including prison reform and forensics, in May this year. (PNA)</p>
+                        <a href="https://www.pna.gov.ph/articles/1244021" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://venturebeat.com/wp-content/uploads/2024/06/Deepfakes-will-cost-40B-by-2027-as-adversarial-AI-gains-momentum-hero-image.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>Guarding Against Cybercrime and Fraud in the Age of Deepfakes</h2>
+                            <div class="news-meta">Justin Herring, Gina M. Parlovecchio, Rajesh De – Mayer Brown | February 5, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>Generative AI is starting to transform many sectors, both legitimate and illicit. Criminals have been early adopters, exploiting technology like deepfakes to turbo-charge existing methods to commit cybercrime and fraud—and invent entirely new ones. AI has made it increasingly challenging to verify the true identities of customers, investors, vendors, and even colleagues.</p>
+                        <p>Companies and their counsel need to understand how to avoid deepfake-related risks, how to address them effectively when they arise, and how to stay within the bounds of their ethical responsibilities. Our panel, comprised of both current and former government officials, will discuss:</p>
+                        <ul>
+                            <p style="margin-left: 20px;">• Deepfake fraud in the workplace, and knowing who you're talking to online</p>
+                            <p style="margin-left: 20px;">• Fake employees and remote-work scams</p>
+                            <p style="margin-left: 20px;">• Meeting professional responsibilities to protect electronic data and communications</p>
+                            <p style="margin-left: 20px;">• How regulators and law enforcement are confronting these new threats</p>
+                        </ul>
+                        <a href="https://www.mayerbrown.com/en/insights/events/2025/02/guarding-against-cybercrime-and-fraud-in-the-age-of-deepfakes" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://od2-image-api.abs-cbn.com/prod/2025013108014/fbd75639688f7cff92a9bfe441dd9b9dcba5dbacd973d286d076ec0309a9c443.png?w=1200&h=800" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>CICC records over 10,000 cybercrime complaints in 2024</h2>
+                            <div class="news-meta">Ched Rick Gatchalian - ABS-CBN News | January 31, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA — A total of 10,004 cybercrime complaints were recorded in 2024, marking a threefold increase compared to 3,317 complaints in 2023, the Cybercrime Investigation and Coordinating Center (CICC) reported on Friday.</p>
+                        <p>The agency also announced P198 million in losses from the recorded cybercrime incidents.</p>
+                        <p>But this does not necessarily translate to a rise in cybercrime prevalence, as CICC Executive Director Alexander K. Ramos described the increase as an indicator of "growing cybercrime awareness of the public and their willingness to report".</p>
+                        <p>"In previous years, people were not aware that they were being scammed and many were not also aware of where to file their complaints," he said.</p>
+
+                        <a href="https://www.abs-cbn.com/news/technology/2025/1/31/cicc-records-over-10-000-cybercrime-complaints-in-2024-1628" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://files01.pna.gov.ph/category-list/2024/08/03/doj-usec-vasquez-satnewsforum-2024aug3-jbondoc-2.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>DOJ to improve anti-cybercrime capacity in 2025</h2>
+                            <div class="news-meta">Benjamin Pulta – PNA | January 23, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA – The Department of Justice (DOJ) will embark on capacity-building this year to improve its anti-cybercrime efforts, according to a senior official.</p>
+                        <p>In an interview on PTV-4's "Bagong Pilipinas Ngayon" on Wednesday, DOJ Undersecretary Raul Vasquez said that for 2025, they will "take major strides in strengthening the DOJ's fight against cybercrime by conducting advanced technological and forensic trainings for its personnel and law enforcement units."</p>
+                        <p>The DOJ has an Office of Cybercrime (OOC) created under Republic Act No. 10175 or the Cybercrime Prevention Act of 2012 that serves as the central authority in all matters relating to international mutual assistance and extradition for cybercrime and cyber-related matters.</p>
+                        <p>The OOC also acts as "the focal agency in formulating and implementing law enforcement investigation and prosecution strategies in curbing cybercrime and cyber-related offenses nationwide," according to the DOJ.</p>
+                        <p>Vasquez made the statement following the arrest of a foreign national and two Filipinos suspected of engaging in months-long electronic intelligence-surveillance-reconnaissance (ISR) operations in key military and civilian infrastructures in the country.</p>
+                        <p>The DOJ confirmed that it is pursuing other members of the group who may have procured equipment used in the eavesdropping operations, even as the military said it is monitoring the role played by Philippine Online Gaming Operators (POGOs) in the alleged spying activities.</p>
+                        <p>The National Bureau of Investigation (NBI) on Wednesday likewise announced the arrest of eight foreigners in Parañaque City allegedly engaged in online phishing operations.</p>                      
+                        <a href="https://www.pna.gov.ph/articles/1242480" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://bilyonaryo.com/wp-content/uploads/2025/01/Thiang-Choon-Wee.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>Malaysian supplier of text scam device arrested in cybercrime sting</h2>
+                            <div class="news-meta">Max Torres Anaten - Brigada News | January 22, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>A Malaysian national believed to be a key supplier of a device used in large-scale text scams was arrested in a joint operation by the Philippine National Police Anti-Cybercrime Group (PNP-ACG) and the Cybercrime Investigation and Coordinating Center (CICC).</p>
+                        <p>Authorities identified the suspect as the alleged leader of a syndicate selling International Mobile Subscriber Identity (IMSI) catchers, electronic tools designed to trace and intercept mobile phone communications.</p>
+                        <p>The CICC began monitoring the suspect's company in October last year, carefully tracking its activities until they were certain of the suspect's involvement before executing the operation.</p>
+                        <p>IMSI catchers, also known as "Stingrays" or rogue cell towers, function by imitating legitimate cell towers to deceive nearby mobile devices into connecting with them. Once connected, the device collects IMSI numbers, enabling the operator to track location, monitor activity, and intercept text messages, calls, and data traffic.</p>
+                        <p>Investigators revealed that these devices are commonly used in text scams, tricking victims into sharing personal information and enabling large-scale fraud operations.</p>
+                        <p>"This arrest is a significant breakthrough in our fight against cybercrime and text scams that target the public," said a CICC representative.</p>
+                        <p>Authorities vowed to continue cracking down on syndicates using advanced technology to commit crimes, urging the public to remain vigilant against scams.</p>
+                        <a href="https://www.brigadanews.ph/malaysian-supplier-of-text-scam-device-arrested-in-cybercrime-sting/" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://files01.pna.gov.ph/category-list/2025/01/17/4-nabbed-for-sale-of-pre-registered-sim-cards.png" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>4 nabbed in 2-day crackdown vs. sale of pre-registered SIM cards</h2>
+                            <div class="news-meta">Christopher Lloyd Caliwan - Philippine News Agency | January 17, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA – Operatives of the Philippine National Police Anti-Cybercrime Group (PNP-ACG) have arrested four persons involved in the illegal online sale of pre-registered subscriber identity module (SIM) cards in separate operations in Laguna province and Quezon City.</p>
+                        <p>In a statement Friday, ACG acting chief Brig. Gen. Bernard Yang said cyberpatrolling activities led to an engagement with the online sellers and their eventual arrest on Jan. 13 to 14.</p>
+                        <p>The Calabarzon police's anti-cybercrime unit spotted a suspect advertising online a bundle of a fully verified e-wallet account and a SIM card priced at PHP800.</p>
+                        <p>An officer arranged to meet up with the suspect and an accomplice, both of whom the ACG did not identify, which resulted in their arrest in Cabuyao town, Laguna at 4:40 p.m. on Jan. 13.</p>
+                        <p>Meanwhile, the ACG's Cyber Financial Crime Unit (CFCU) said another suspect, alias "JP," was selling an e-wallet account with an automated teller machine (ATM) card as well as an online banking account worth PHP3,000.</p>
+                        <p>The suspect was arrested after meeting up with a police officer who acted as a buyer along Mayon Street in Quezon City at around 12:58 p.m. on Jan. 14.</p>
+                        <p>Around 2:32 p.m. on the same date, the anti-cybercrime units of Northern Police District and Quezon City Police District arrested a suspect, alias Arvin, for selling his registered SIM card, along General Araneta Avenue in Cubao, Quezon City.</p>
+                        <p>The SIM card was linked to a verified e-wallet account and was priced at PHP2,300, the ACG said in a separate report.</p>
+                        <p>All four suspects were charged with violations of the SIM Registration Act, the Anti-Financial Account Scamming Act, and the Cybercrime Prevention Act.</p>
+                        <p>The SIM card can be used for text scams or to create a social media account for scamming activities.</p>
+                        <p>Yang reminded the public that the illegal online sale of SIM cards is punishable by law, with significant fines and imprisonment.</p>
+                        <p>"It is crucial to adhere to the law and avoid involvement in such online illegal transactions to protect oneself and prevent the spread of cybercrime," he added. (PNA)</p>
+
+                        <a href="https://www.pna.gov.ph/articles/1242003" target="_blank">Read more</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-header" onclick="toggleDetails(this)">
+                        <img src="https://files01.pna.gov.ph/category-list/2023/01/25/0010.jpg" alt="News Image" class="news-image">
+                        <div class="news-title">
+                            <h2>DICT seeks to amend cybercrime law as scammers upgrade</h2>
+                            <div class="news-meta">Darryl John Esguerra – PNA | January 7, 2025</div>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="news-details">
+                        <p>MANILA – The Department of Information and Communications Technology (DICT) is pushing for changes to the cybercrime law to better address the evolving tactics of scammers.</p>
+                        <p>In a press briefing at Malacañang on Tuesday, DICT Secretary Ivan John Uy acknowledged that scam text messages have resurfaced despite the implementation of the SIM Card Registration law.</p>
+                        <p>He noted that while the registration had helped deter scammers, these criminals have adapted, using new techniques and equipment.</p>
+                        <p>"So, ngayon, dahil marami tayong na-raid at dismantle na mga malalaking operations na ganoon, naging guerilla warfare ngayon (Since we have raided and dismantled a lot of big operations, it has become guerilla warfare now)," Uy said.</p>
+                        <p>"They have reduced them into smaller teams, very mobile, they moved around and so, we have to respond accordingly and also change our tactics in going after them."</p>
+                        <p>To combat these evolving threats, the DICT is strengthening its on-the-ground operations while working with Congress to update the cybercrime law.</p>
+                        <a href="https://www.pna.gov.ph/articles/1241199" target="_blank">Read more</a>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
     <script>
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
+        const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+        const sidebar = document.getElementById('sidebar');
+        const loaderOverlay = document.getElementById('loaderOverlay');
+
+        if (localStorage.getItem('darkTheme') === 'enabled') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+        }
 
         themeToggle.addEventListener('change', function() {
-            body.classList.toggle('dark-theme');
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('darkTheme', 'enabled');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('darkTheme', 'disabled');
+            }
         });
+
+        mobileMenuIcon.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            const icon = mobileMenuIcon.querySelector('i');
+            if (sidebar.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        document.querySelectorAll('a[href]').forEach(link => {
+            if (link.href && !link.href.startsWith('javascript:') && !link.href.startsWith('#')) {
+                link.addEventListener('click', function(e) {
+
+                    if (!this.href.includes(window.location.hostname)) return;
+                    
+                    e.preventDefault();
+                    loaderOverlay.classList.add('active');
+
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 150);
+                });
+            }
+        });
+
+        function toggleDetails(header) {
+            const details = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            details.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
     </script>
 </body>
 </html>
