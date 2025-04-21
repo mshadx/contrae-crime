@@ -68,7 +68,7 @@
 
         .container {
             display: flex;
-            height: 100%;
+            min-height: 100vh;
         }
 
         .sidebar {
@@ -116,7 +116,7 @@
         }
 
         .sidebar ul li a:not(.dark-theme-label a):hover {
-            color: #d7b15c; 
+            color: #d7b15c;
             transform: translateX(5px);
         }
 
@@ -214,17 +214,28 @@
         .content {
             flex: 1;
             margin-left: 290px;
-            padding: 50px;
+            padding: 50px 30px 30px 30px;
             position: relative;
-            background-color: #f7f7f7;
+            background: url('https://example.com/cityscape-pattern.jpg') no-repeat center center;
+            background-size: cover;
             transition: background-color 0.3s ease, margin-left 0.3s ease;
-            min-height: 100vh;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(200, 200, 200, 0.3);
+            z-index: 0;
         }
 
         .header {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 50px;
+            margin-bottom: none;
             position: relative;
             z-index: 1;
         }
@@ -241,65 +252,416 @@
             font-size: 24px;
         }
 
-        .about-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        /* Ensure sections are above the overlay */
+        .hero-section,
+        .timeline-section,
+        .growth-section,
+        .careers-section,
+        .leaders-section {
+            position: relative;
+            z-index: 1;
         }
 
-        .about-title {
+        /* Hero Section */
+        .hero-section {
+            padding: 10px 20px;
+            text-align: center;
+            position: relative;
+            background-color: transparent;
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .hero-section h1 span {
+            position: relative;
+        }
+
+        .hero-section h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #8B0000;
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+
+        .hero-image {
+            width: 55%;
+            height: 350px;
+            background: url('https://i.imgur.com/Rj26r1i.png') no-repeat center center;
+            background-size: cover;
+            opacity: 0;
+            margin: auto;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.6s;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: transparent;
+        }
+
+        .timeline-section h2 {
             font-size: 32px;
             color: #8B0000;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: #ccc;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item.right {
+            flex-direction: row-reverse;
+            transform: translateX(50px);
+        }
+
+        .timeline-item.right.visible {
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .timeline-content h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .timeline-content p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            background-color: #8B0000;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        /* Growth Section */
+        .growth-section {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: transparent;
+        }
+
+        .growth-section h2 {
+            font-size: 32px;
+            color: #8B0000;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .growth-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .growth-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .growth-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .growth-item i {
+            font-size: 32px;
+            color: #8B0000;
+            margin-bottom: 10px;
+        }
+
+        .growth-item h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .growth-item p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Careers Section */
+        .careers-section {
+            padding: 60px 20px;
             text-align: center;
         }
 
-        .about-content {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 30px;
-            text-align: justify;
+        .careers-card {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background: url('https://via.placeholder.com/800x300?text=Careers+Background') no-repeat center center;
+            background-size: cover;
+            border-radius: 10px;
+            color: #fff;
+            text-align: left;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .highlight {
-            font-weight: bold;
+        .careers-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .careers-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(139, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .careers-card h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .careers-card p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .careers-card a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #8B0000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .careers-card a:hover {
+            background-color: #580100;
+        }
+
+        /* Leaders Section */
+        .leaders-section {
+            padding: 60px 20px;
+            text-align: center;
+            background-color: transparent;
+        }
+
+        .leaders-section h2 {
+            font-size: 32px;
             color: #8B0000;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
         }
 
-        /* Dark Theme Styles */
+        .leaders-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .leader-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .leader-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .leader-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .leader-item h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .leader-item p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Dark Theme */
         body.dark-theme {
             background-color: #121212;
             color: #e0e0e0;
         }
 
-        body.dark-theme .content {
-            background-color: #121212;
+        .dark-theme .content {
+            background-color: #28292c;
         }
 
-        body.dark-theme .user-info {
+        .dark-theme .content::before {
+            background-color: rgba(40, 41, 44, 0.9);
+        }
+
+        .dark-theme .user-info {
             color: #d8dbe0;
         }
 
-        body.dark-theme .about-container {
-            background-color: #1e1e1e;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .dark-theme .hero-section {
+            background-color: #28292c;
         }
 
-        body.dark-theme .about-title {
-            color: #d7b15c;
+        .dark-theme .hero-section h1 {
+            color: #d8dbe0;
         }
 
-        body.dark-theme .about-content {
+        .dark-theme .hero-section p {
             color: #b0b0b0;
         }
 
-        body.dark-theme .highlight {
+        .dark-theme .timeline-section {
+            background-color: #333;
+        }
+
+        .dark-theme .timeline-section h2 {
             color: #d7b15c;
+        }
+
+        .dark-theme .timeline-content {
+            background-color: #444;
+        }
+
+        .dark-theme .timeline-content h3 {
+            color: #d8dbe0;
+        }
+
+        .dark-theme .timeline-content p {
+            color: #b0b0b0;
+        }
+
+        .dark-theme .growth-section {
+            background-color: #28292c;
+        }
+
+        .dark-theme .growth-section h2 {
+            color: #d7b15c;
+        }
+
+        .dark-theme .growth-item i {
+            color: #d7b15c;
+        }
+
+        .dark-theme .growth-item h3 {
+            color: #d8dbe0;
+        }
+
+        .dark-theme .growth-item p {
+            color: #b0b0b0;
+        }
+
+        .dark-theme .leaders-section {
+            background-color: #333;
+        }
+
+        .dark-theme .leaders-section h2 {
+            color: #d7b15c;
+        }
+
+        .dark-theme .leader-item h3 {
+            color: #d8dbe0;
+        }
+
+        .dark-theme .leader-item p {
+            color: #b0b0b0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Mobile Navigation Styles */
@@ -348,7 +710,28 @@
 
             .content {
                 margin-left: 250px;
-                padding: 30px;
+            }
+
+            .hero-section h1 {
+                font-size: 36px;
+            }
+
+            .hero-section p {
+                font-size: 16px;
+            }
+
+            .hero-image {
+                height: 200px;
+            }
+
+            .timeline-section h2,
+            .growth-section h2,
+            .leaders-section h2 {
+                font-size: 28px;
+            }
+
+            .careers-card h2 {
+                font-size: 24px;
             }
         }
 
@@ -372,11 +755,35 @@
 
             .content {
                 margin-left: 200px;
-                padding: 20px;
             }
 
-            .about-container {
-                padding: 30px;
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .timeline-item.right {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .timeline-content {
+                width: 100%;
+                margin-left: 40px;
+            }
+
+            .timeline-marker {
+                left: 20px;
+                transform: none;
+            }
+
+            .growth-grid,
+            .leaders-grid {
+                gap: 20px;
             }
         }
 
@@ -423,23 +830,51 @@
 
             .content {
                 margin-left: 0;
-                padding: 80px 15px 15px;
             }
 
             .header {
                 justify-content: center;
             }
 
-            .about-container {
-                padding: 20px;
+            .hero-section {
+                padding: 40px 10px;
             }
 
-            .about-title {
+            .hero-section h1 {
                 font-size: 28px;
             }
 
-            .about-content {
-                font-size: 16px;
+            .hero-section p {
+                font-size: 14px;
+            }
+
+            .hero-image {
+                height: 150px;
+            }
+
+            .timeline-section,
+            .growth-section,
+            .careers-section,
+            .leaders-section {
+                padding: 40px 10px;
+            }
+
+            .timeline-section h2,
+            .growth-section h2,
+            .leaders-section h2 {
+                font-size: 24px;
+            }
+
+            .careers-card {
+                padding: 20px;
+            }
+
+            .careers-card h2 {
+                font-size: 20px;
+            }
+
+            .careers-card p {
+                font-size: 14px;
             }
         }
     </style>
@@ -518,19 +953,123 @@
             </div>
         </nav>
         <main class="content">
-            <div class="header">
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <span>New User<br><a href="mailto:hello@reallygreatsite">newuser@gmail</a></span>
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1>A world where anyone can navigate <span>cybercrime laws with ease</span></h1>
+                <p>In 2025, a group of Grade 12 students from STI College Fairview created Cybercrime e-Laws to simplify access to cybercrime laws for students and non-experts. Our platform, Weigh the Right, helps users in the Philippines understand their digital rights.</p>
+                <div class="hero-image"></div>
+            </section>
+
+            <!-- Timeline Section -->
+            <section class="timeline-section">
+                <h2>Our Story</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>January 2025 – A School Project Begins</h3>
+                            <p>Founded by Benz Daniel A. Buhay, Zachary Benidict E. Candelario, Jorilyne P. Lanuzo, Jeremy D. Montalban, Sam Othaniel P. Pascual, Elijia R. Ramirez, Matthew M. Valencia, and Hanna Daniella S. Ventura for a Grade 12 ICT project at STI College Fairview.</p>
+                        </div>
+                        <div class="timeline-marker"></div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <h3>March 2025 – Building The Website</h3>
+                            <p>Developed Weigh the Right for Contra E-Crime, a website offering accessible cybercrime law guidance with a focus on user-friendliness and affordability for students.</p>
+                        </div>
+                        <div class="timeline-marker"></div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>May 2025 – Ready for the SHS Expo</h3>
+                            <p>Prepared to showcase Weigh the Right at the SHS expo, targeting students and educators with real-time updates on Philippine cyber laws.</p>
+                        </div>
+                        <div class="timeline-marker"></div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="about-container">
-                <h1 class="about-title">A world where anyone can navigate cybercrime laws with ease</h1>
-                <p class="about-content">
-                    In 2025, a group of Grade 12 students from <span class="highlight">STI College Fairview</span> created <span class="highlight">Cybercrime e-Laws</span> to simplify access to cybercrime laws for students and non-experts. Our platform, <span class="highlight">Weigh the Right</span>, helps users in the Philippines understand their digital rights.
-                </p>
-            </div>
+            </section>
+
+            <!-- Growth Section -->
+            <section class="growth-section">
+                <h2>We’ve Grown To</h2>
+                <div class="growth-grid">
+                    <div class="growth-item">
+                        <i class="fas fa-users fa-2x"></i>
+                        <h3>000</h3>
+                        <p>Annual Users</p>
+                    </div>
+                    <div class="growth-item">
+                        <i class="fas fa-user-check fa-2x"></i>
+                        <h3>000</h3>
+                        <p>Monthly Active Users</p>
+                    </div>
+                    <div class="growth-item">
+                        <i class="fas fa-user-group fa-2x"></i>
+                        <h3>8</h3>
+                        <p>Team Members</p>
+                    </div>
+                    <div class="growth-item">
+                        <i class="fas fa-handshake fa-2x"></i>
+                        <h3>1</h3>
+                        <p>Educational Partner</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Careers Section -->
+            <section class="careers-section">
+                <div class="careers-card">
+                    <h2>Product</h2>
+                    <p>Contra E-Crime is a student project passionate about making cyber laws easy to understand having Weigh the Right as our main tool for giving you the best search experience. Want to explore more of the website? Let’s connect at the SHS expo!</p>
+                    <a href="HomePage.html">Learn More</a>
+                </div>
+            </section>
+
+            <!-- Leaders Section -->
+            <section class="leaders-section">
+                <h2>Our Members</h2>
+                <div class="leaders-grid">
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/Cic9hdv.jpeg" alt="Sam Othaniel P. Pascual">
+                        <h3>Sam Othaniel P. Pascual</h3>
+                        <p>Head Executive (CEO)</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/40aK6A8.jpeg" alt="Hanna Daniella S. Ventura">
+                        <h3>Hanna Daniella S. Ventura</h3>
+                        <p>Operations Manager</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/1sDizQF.jpeg" alt="Jorilyne P. Lanuzo">
+                        <h3>Jorilyne P. Lanuzo</h3>
+                        <p>Human Resources Manager</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/Qsd0OKl.jpeg" alt="Zachary Benidict E. Candelario">
+                        <h3>Zachary Benidict E. Candelario</h3>
+                        <p>Product Manager</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/wP2dOJ6.jpeg" alt="Benz Buhay">
+                        <h3>Benz Buhay</h3>
+                        <p>Figurehead</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/O6y6Bj9.jpeg" alt="Matthew Valencia">
+                        <h3>Matthew Valencia</h3>
+                        <p>Monitor</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/qnDT5rx.jpeg" alt="Elijia Ramirez">
+                        <h3>Elijia Ramirez</h3>
+                        <p>Disturbance Handler</p>
+                    </div>
+                    <div class="leader-item">
+                        <img src="https://i.imgur.com/CYZ9DqQ.jpeg" alt="Jeremy Montalban">
+                        <h3>Jeremy Montalban</h3>
+                        <p>Entrepreneur</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -571,7 +1110,6 @@
         document.querySelectorAll('a[href]').forEach(link => {
             if (link.href && !link.href.startsWith('javascript:') && !link.href.startsWith('#')) {
                 link.addEventListener('click', function(e) {
-
                     if (!this.href.includes(window.location.hostname)) return;
                     
                     e.preventDefault();
@@ -582,6 +1120,21 @@
                     }, 150);
                 });
             }
+        });
+
+        // Intersection Observer for animations
+        const items = document.querySelectorAll('.timeline-item, .growth-item, .careers-card, .leader-item');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        items.forEach(item => {
+            observer.observe(item);
         });
     </script>
 </body>
