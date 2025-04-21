@@ -6,6 +6,8 @@
     <title>Contra e-Crime - Contact Us</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Add EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -216,174 +218,229 @@
             margin-left: 290px;
             padding: 30px;
             position: relative;
-            background-color: #f7f7f7;
+            background: url('https://i.imgur.com/yytZfZz.png') no-repeat center center;
+            background-size: cover;
             transition: background-color 0.3s ease, margin-left 0.3s ease;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(247, 247, 247, 0.9);
+            z-index: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .user-info i {
+            font-size: 24px;
+        }
+
+        .contact-section {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
         }
 
-        .contact-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 800px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        .contact-section h1 {
+            font-size: 60px;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 12px;
         }
 
-        .contact-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .contact-header h2 {
-            font-size: 32px;
-            color: #8B0000;
-            margin-bottom: 10px;
-        }
-
-        .contact-header p {
-            font-size: 18px;
+        .contact-section p.tagline {
+            font-size: 22px;
             color: #666;
+            margin-bottom: 50px;
         }
 
-        .contact-info {
+        .contact-grid {
             display: flex;
+            gap: 50px;
             flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 40px;
         }
 
-        .contact-details {
+        .contact-details, .contact-form {
             flex: 1;
-            min-width: 250px;
+            min-width: 350px;
         }
 
-        .contact-details h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .contact-item {
+        .contact-details .detail-item {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            gap: 18px;
+            margin-bottom: 25px;
         }
 
-        .contact-item i {
-            font-size: 20px;
+        .contact-details .detail-item i {
+            font-size: 28px;
             color: #8B0000;
-            margin-right: 15px;
-            width: 30px;
-            text-align: center;
+            background-color: #f0f0f0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
-        .contact-item span {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .contact-form {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
+        .contact-details .detail-item p {
+            margin: 0;
+            font-size: 20px;
             color: #333;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 12px;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .form-group textarea {
-            height: 120px;
-            resize: vertical;
+        .contact-form textarea {
+            height: 200px;
+            resize: none;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #8B0000;
-            outline: none;
-        }
-
-        .send-btn {
+        .contact-form button {
+            padding: 12px;
             background-color: #8B0000;
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 20px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            width: 100%;
         }
 
-        .send-btn:hover {
-            background-color: #6d0000;
+        .contact-form button:hover {
+            background-color: #580100;
+        }
+
+        .confirmation-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0f7e0;
+            border: 1px solid #c3e6c3;
+            border-radius: 6px;
+            font-size: 18px;
+            color: #2e7d32;
+            text-align: center;
+        }
+
+        .confirmation-message.visible {
+            display: block;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            font-size: 18px;
+            color: #721c24;
+            text-align: center;
+        }
+
+        .error-message.visible {
+            display: block;
         }
 
         /* Dark Theme Styles */
         body.dark-theme {
-            background-color: #121212;
-            color: #e0e0e0;
+            background-color: #28292c;
+            color: #d8dbe0;
         }
 
-        body.dark-theme .content {
-            background-color: #121212;
+        .dark-theme .content::before {
+            background-color: rgba(40, 41, 44, 0.9);
         }
 
-        body.dark-theme .contact-container {
-            background-color: #1e1e1e;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .dark-theme .user-info {
+            color: #d8dbe0;
         }
 
-        body.dark-theme .contact-header h2 {
-            color: #d7b15c;
+        .dark-theme .contact-section h1 {
+            color: #d8dbe0;
         }
 
-        body.dark-theme .contact-header p,
-        body.dark-theme .contact-details h3,
-        body.dark-theme .form-group label {
-            color: #e0e0e0;
-        }
-
-        body.dark-theme .contact-item span,
-        body.dark-theme .contact-item i {
+        .dark-theme .contact-section p.tagline {
             color: #b0b0b0;
         }
 
-        body.dark-theme .form-group input,
-        body.dark-theme .form-group textarea {
-            background-color: #2d2d2d;
-            border-color: #444;
-            color: #e0e0e0;
+        .dark-theme .contact-details .detail-item i {
+            background-color: #444;
         }
 
-        body.dark-theme .send-btn {
+        .dark-theme .contact-details .detail-item p {
+            color: #d8dbe0;
+        }
+
+        .dark-theme .contact-form input,
+        .dark-theme .contact-form textarea {
+            background-color: #333;
+            color: #d8dbe0;
+            border-color: #555;
+        }
+
+        .dark-theme .contact-form button {
             background-color: #d7b15c;
             color: #121212;
         }
 
-        body.dark-theme .send-btn:hover {
+        .dark-theme .contact-form button:hover {
             background-color: #c19d4f;
+        }
+
+        .dark-theme .confirmation-message {
+            background-color: #2e4b2e;
+            border-color: #4a704a;
+            color: #a5d6a7;
+        }
+
+        .dark-theme .error-message {
+            background-color: #5a1e24;
+            border-color: #80343a;
+            color: #f5c6cb;
         }
 
         /* Mobile Navigation Styles */
@@ -433,6 +490,38 @@
             .content {
                 margin-left: 250px;
             }
+
+            .contact-section h1 {
+                font-size: 48px;
+            }
+
+            .contact-section p.tagline {
+                font-size: 18px;
+            }
+
+            .contact-details .detail-item i {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .contact-details .detail-item p {
+                font-size: 18px;
+            }
+
+            .contact-form input,
+            .contact-form textarea {
+                font-size: 18px;
+            }
+
+            .contact-form button {
+                font-size: 18px;
+            }
+
+            .confirmation-message,
+            .error-message {
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -458,8 +547,18 @@
                 padding: 20px;
             }
 
-            .contact-container {
-                padding: 30px;
+            .contact-grid {
+                flex-direction: column;
+            }
+
+            .contact-details .detail-item i {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .contact-details .detail-item p {
+                font-size: 16px;
             }
         }
 
@@ -509,16 +608,44 @@
                 padding: 80px 15px 15px;
             }
 
-            .contact-container {
-                padding: 20px;
+            .header {
+                justify-content: center;
             }
 
-            .contact-header h2 {
-                font-size: 28px;
+            .contact-section h1 {
+                font-size: 36px;
             }
 
-            .contact-header p {
+            .contact-section p.tagline {
                 font-size: 16px;
+            }
+
+            .contact-details .detail-item i {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .contact-details .detail-item p {
+                font-size: 14px;
+            }
+
+            .contact-form input,
+            .contact-form textarea {
+                font-size: 16px;
+            }
+
+            .contact-form textarea {
+                height: 150px;
+            }
+
+            .contact-form button {
+                font-size: 16px;
+            }
+
+            .confirmation-message,
+            .error-message {
+                font-size: 14px;
             }
         }
     </style>
@@ -597,66 +724,61 @@
             </div>
         </nav>
         <main class="content">
-            <div class="contact-container">
-                <div class="contact-header">
-                    <h2>CONTACT US</h2>
-                    <p>We're here to help you!</p>
-                </div>
-                
-                <div class="contact-info">
+            <section class="contact-section">
+                <h1>CONTACT US</h1>
+                <p class="tagline">We’re here to help you!</p>
+                <div class="contact-grid">
                     <div class="contact-details">
-                        <h3>Contact Information</h3>
-                        <div class="contact-item">
+                        <div class="detail-item">
                             <i class="fas fa-phone"></i>
-                            <span>+63 936 365 4043</span>
+                            <p>+63 936 365 4043</p>
                         </div>
-                        <div class="contact-item">
+                        <div class="detail-item">
                             <i class="fas fa-globe"></i>
-                            <span>www.contraccrime.com</span>
+                            <p>www.contraecrime.com</p>
                         </div>
-                        <div class="contact-item">
+                        <div class="detail-item">
                             <i class="fas fa-envelope"></i>
-                            <span>cc.contraccrime@gmail.com</span>
+                            <p>cc.contraecrime@gmail.com</p>
                         </div>
-                        <div class="contact-item">
+                        <div class="detail-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Regalado Hwy, Novaliches, Quezon City, Metro Manila</span>
+                            <p>Regalado Hwy, Novaliches, Quezon City, Metro Manila</p>
                         </div>
                     </div>
-                    
                     <div class="contact-form">
-                        <h3>Send Us a Message</h3>
-                        <form>
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" placeholder="Your Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">E-Mail</label>
-                                <input type="email" id="email" placeholder="Your Email">
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" placeholder="Your Phone Number">
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea id="message" placeholder="Your Message"></textarea>
-                            </div>
-                            <button type="submit" class="send-btn">Send Message</button>
+                        <form id="contactForm">
+                            <input type="text" name="name" placeholder="Name" required>
+                            <input type="email" name="email" placeholder="E-Mail" required>
+                            <input type="tel" name="phone" placeholder="Phone Number" required>
+                            <textarea name="message" placeholder="Message" required></textarea>
+                            <button type="submit">Send Messages</button>
                         </form>
+                        <div class="confirmation-message" id="confirmationMessage">
+                            Your message has been submitted and will be sent to our Official Members.
+                        </div>
+                        <div class="error-message" id="errorMessage">
+                            There was an error sending your message. Please try again later.
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </main>
     </div>
 
     <script>
+        (function() {
+            emailjs.init("xhI4LOp07Z_Z80qHU");
+        })();
+
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         const mobileMenuIcon = document.getElementById('mobileMenuIcon');
         const sidebar = document.getElementById('sidebar');
         const loaderOverlay = document.getElementById('loaderOverlay');
+        const contactForm = document.getElementById('contactForm');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const errorMessage = document.getElementById('errorMessage');
 
         if (localStorage.getItem('darkTheme') === 'enabled') {
             body.classList.add('dark-theme');
@@ -688,7 +810,6 @@
         document.querySelectorAll('a[href]').forEach(link => {
             if (link.href && !link.href.startsWith('javascript:') && !link.href.startsWith('#')) {
                 link.addEventListener('click', function(e) {
-
                     if (!this.href.includes(window.location.hostname)) return;
                     
                     e.preventDefault();
@@ -699,6 +820,30 @@
                     }, 150);
                 });
             }
+        });
+
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            confirmationMessage.classList.remove('visible');
+            errorMessage.classList.remove('visible');
+
+            const formData = {
+                name: contactForm.querySelector('input[name="name"]').value,
+                email: contactForm.querySelector('input[name="email"]').value,
+                phone: contactForm.querySelector('input[name="phone"]').value,
+                message: contactForm.querySelector('textarea[name="message"]').value
+            };
+
+            emailjs.send("service_u73ui1i", "template_ctzw4rk", formData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    confirmationMessage.classList.add('visible');
+                    contactForm.reset();
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    errorMessage.classList.add('visible');
+                });
         });
     </script>
 </body>
