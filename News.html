@@ -21,65 +21,65 @@
         }
 
         .loader-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
 
-.loader-overlay.active {
-    opacity: 1;
-    pointer-events: all;
-}
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
 
-.fingerprint-loader {
-    width: 150px;
-    height: 150px;
-    background: url('https://static.thenounproject.com/png/1238269-200.png') no-repeat center center;
-    background-size: contain;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: pulse 1.5s infinite ease-in-out;
-}
+        .fingerprint-loader {
+            width: 150px;
+            height: 150px;
+            background: url('https://static.thenounproject.com/png/1238269-200.png') no-repeat center center;
+            background-size: contain;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
 
-.fingerprint-loader::before {
-    content: "";
-    position: absolute;
-    width: 138px;
-    height: 140px;
-    border: 3px solid;
-    border-radius: 50%;
-    z-index: 0;
-    color: #ffffff;
-    animation: pulseBorder 1.5s infinite ease-in-out;
-}
+        .fingerprint-loader::before {
+            content: "";
+            position: absolute;
+            width: 138px;
+            height: 140px;
+            border: 3px solid;
+            border-radius: 50%;
+            z-index: 0;
+            color: #ffffff;
+            animation: pulseBorder 1.5s infinite ease-in-out;
+        }
 
-.dark-theme .fingerprint-loader::before {
-    color: #d7b15c;
-}
+        .dark-theme .fingerprint-loader::before {
+            color: #d7b15c;
+        }
 
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-@keyframes pulseBorder {
-    0% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.7; }
-}
+        @keyframes pulseBorder {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
 
         .container {
             display: flex;
@@ -153,7 +153,6 @@
         .dark-theme .sidebar ul li a:not(.dark-theme-label a):hover {
             color: #d7b15c;
         }
-
 
         .dark-theme-container {
             display: flex;
@@ -335,8 +334,28 @@
         }
 
         .news-details.active {
-            max-height: 1000px;
+            max-height: 300px;
             padding: 15px;
+            overflow-y: auto;
+        }
+
+        /* Custom scrollbar styles */
+        .news-details.active::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .news-details.active::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .news-details.active::-webkit-scrollbar-thumb {
+            background: #8B0000;
+            border-radius: 4px;
+        }
+
+        .news-details.active::-webkit-scrollbar-thumb:hover {
+            background: #6d0000;
         }
 
         .news-details p {
@@ -401,6 +420,18 @@
 
         body.dark-theme .news-details a {
             color: #ff6b6b;
+        }
+
+        body.dark-theme .news-details.active::-webkit-scrollbar-track {
+            background: #252525;
+        }
+
+        body.dark-theme .news-details.active::-webkit-scrollbar-thumb {
+            background: #fff;
+        }
+
+        body.dark-theme .news-details.active::-webkit-scrollbar-thumb:hover {
+            background: #fff;
         }
 
         /* Mobile Navigation Styles */
