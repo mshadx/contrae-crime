@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contra e-Crime</title>
+    <title>Contra E-Crime</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/Dccn8pc.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -66,14 +67,41 @@
             border-bottom-color: transparent;
         }
 
+        .avatar-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 101;
+        }
+
+        .avatar-loading.active {
+            display: flex;
+        }
+
+        .avatar-loading .loader {
+            width: 24px;
+            height: 24px;
+            border-width: 3px;
+        }
+
         .container {
             display: flex;
-            height: 100%;
+            min-height: 100vh;
+            flex-direction: column;
         }
 
         .sidebar {
             width: 290px;
-            background-color: #8B0000;
+            background-image: url('https://i.imgur.com/bNRxAhZ.png');
+            background-size: cover;
+            background-position: center;
             color: white;
             padding: 20px;
             height: 100vh;
@@ -108,12 +136,12 @@
         .sidebar ul li a:not(.dark-theme-label a) {
             transition: all 0.3s ease;
             position: relative;
-}
+        }
 
         .sidebar ul li a:not(.dark-theme-label a):hover {
-            color: #d7b15c; 
+            color: #d7b15c;
             transform: translateX(5px);
-}
+        }
 
         .sidebar ul li a:not(.dark-theme-label a)::after {
             content: '';
@@ -124,15 +152,15 @@
             left: 0;
             background-color: #d7b15c;
             transition: width 0.3s ease;
-}
+        }
 
         .sidebar ul li a:not(.dark-theme-label a):hover::after {
             width: 95%;
-}
+        }
 
         .dark-theme .sidebar ul li a:not(.dark-theme-label a):hover {
             color: #d7b15c;
-}
+        }
 
         .sidebar ul li a img {
             width: 30px;
@@ -216,7 +244,6 @@
             padding: 20px;
             margin-left: 290px;
             overflow-y: auto;
-            height: 100vh;
             transition: background-color 0.3s ease, margin-left 0.3s ease;
         }
 
@@ -225,18 +252,208 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 30px;
+            position: relative;
         }
 
-        .fingerprint-icon {
-            width: 150px;
-            height: 150px;
-            background: url('https://static.thenounproject.com/png/1238269-200.png') no-repeat center center;
-            background-size: contain;
-            margin-bottom: 20px;
+        .account-customization {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .user-details {
+            display: none;
+        }
+
+        .avatar-container {
             position: relative;
+            display: inline-block;
+        }
+
+        .avatar-container .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ccc;
             display: flex;
             justify-content: center;
             align-items: center;
+            object-fit: cover;
+            border: 2px solid #000;
+            cursor: pointer;
+            color: transparent;
+            font-size: 0;
+        }
+
+        .customization-options {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            padding: 8px;
+            z-index: 100;
+            align-items: flex-start;
+            width: 300px;
+        }
+
+        .customization-options.active {
+            display: flex;
+        }
+
+        .customization-options .user-info {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #d32f2f 100%);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .customization-options .user-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/circuit.png');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .customization-options .user-info p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            overflow-wrap: break-word;
+        }
+
+        .customization-options .user-info p::before {
+            content: attr(data-label);
+            font-weight: 700;
+            color: #ff3333;
+            margin-right: 5px;
+        }
+
+        .customization-options label {
+            font-size: 12px;
+            color: #333;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            text-align: left;
+        }
+
+        .customization-options label:hover {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .customization-options input[type="color"] {
+            width: 100%;
+            height: 25px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            background: none;
+        }
+
+        .customization-options select {
+            font-size: 12px;
+            padding: 4px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .customization-options input[type="file"] {
+            display: none;
+        }
+
+        .customization-options .file-input-label {
+            font-size: 12px;
+            color: #333;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            text-align: left;
+        }
+
+        .customization-options .file-input-label:hover {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .dark-theme .customization-options {
+            background-color: #3a3b3c;
+            border-color: #555;
+        }
+
+        .dark-theme .customization-options .user-info {
+            background: linear-gradient(135deg, #5a6268 0%, #454b50 50%, #2f3539 100%);
+            color: #e0e0e0;
+        }
+
+        .dark-theme .customization-options .user-info p {
+            color: #e0e0e0;
+        }
+
+        .dark-theme .customization-options .user-info p::before {
+            color: #ffeb3b;
+        }
+
+        .dark-theme .customization-options label,
+        .dark-theme .customization-options .file-input-label {
+            color: #e0e0e0;
+        }
+
+        .dark-theme .customization-options label:hover,
+        .dark-theme .customization-options .file-input-label:hover {
+            background-color: #4a4b4c;
+        }
+
+        .dark-theme .customization-options select {
+            background-color: #3a3b3c;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+
+        .fingerprint-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .fingerprint-icon {
+            width: 100%;
+            height: 100%;
+            background: url('https://static.thenounproject.com/png/1238269-200.png') no-repeat center center;
+            background-size: contain;
+            position: relative;
+            transition: transform 0.5s ease;
         }
 
         .fingerprint-icon::before {
@@ -250,37 +467,183 @@
             border-radius: 50%;
             z-index: 0;
             color: #000000;
+            transition: border-color 0.3s ease;
         }
 
-        /* Search Bar */
+        .dark-theme .fingerprint-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        .dark-theme .fingerprint-icon::before {
+            border-color: #ffffff;
+        }
+
+        .fingerprint-icon.scanning {
+            animation: glow 2s infinite ease-in-out, rotate3D 5s infinite linear;
+        }
+
+        .fingerprint-icon.scanning::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            animation: ripple 2s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .fingerprint-icon .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #ff0000, transparent);
+            top: 50%;
+            left: 0;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .fingerprint-icon.scanning .scan-line {
+            animation: scanVertical 1.5s infinite linear;
+        }
+
+        .fingerprint-icon .scan-line:nth-child(2) {
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #ff0000, transparent);
+            top: 0;
+            left: 50%;
+        }
+
+        .fingerprint-icon.scanning .scan-line:nth-child(2) {
+            animation: scanHorizontal 1.5s infinite linear;
+        }
+
+        .fingerprint-icon .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .fingerprint-icon.scanning .particle {
+            animation: particleMove 3s infinite ease-in-out;
+        }
+
+        .fingerprint-icon .particle:nth-child(3) { top: 10%; left: 20%; animation-delay: 0s; }
+        .fingerprint-icon .particle:nth-child(4) { top: 80%; left: 30%; animation-delay: 0.5s; }
+        .fingerprint-icon .particle:nth-child(5) { top: 40%; left: 70%; animation-delay: 1s; }
+        .fingerprint-icon .particle:nth-child(6) { top: 60%; left: 10%; animation-delay: 1.5s; }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8)); }
+        }
+
+        @keyframes rotate3D {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            50% { transform: rotateY(10deg) rotateX(5deg); }
+            100% { transform: rotateY(0deg) rotateX(0deg); }
+        }
+
+        @keyframes ripple {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.5; }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+
+        @keyframes scanVertical {
+            0% { transform: translateY(-60px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(60px); opacity: 0; }
+        }
+
+        @keyframes scanHorizontal {
+            0% { transform: translateX(-60px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(60px); opacity: 0; }
+        }
+
+        @keyframes particleMove {
+            0% { opacity: 0; transform: translate(0, 0); }
+            50% { opacity: 1; transform: translate(10px, -10px); }
+            100% { opacity: 0; transform: translate(-10px, 10px); }
+        }
+
+        .dark-theme .fingerprint-icon.scanning::after {
+            background: radial-gradient(circle, rgba(215, 177, 92, 0.3) 0%, transparent 70%);
+        }
+
+        .dark-theme .fingerprint-icon .scan-line {
+            background: linear-gradient(to right, transparent, #d7b15c, transparent);
+        }
+
+        .dark-theme .fingerprint-icon .scan-line:nth-child(2) {
+            background: linear-gradient(to bottom, transparent, #d7b15c, transparent);
+        }
+
+        .dark-theme .fingerprint-icon .particle {
+            background: #d7b15c;
+        }
+
+        .dark-theme .fingerprint-icon.scanning {
+            animation: glowDark 2s infinite ease-in-out, rotate3D 5s infinite linear;
+        }
+
+        @keyframes glowDark {
+            0%, 100% { filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(215, 177, 92, 0.5)); }
+            50% { filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(215, 177, 92, 0.8)); }
+        }
+
         .search-container {
             width: 40%;
             position: relative;
             margin-bottom: 20px;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            border-radius: 10px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .search-container:hover {
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.15), -5px -5px 20px rgba(255, 255, 255, 0.9);
         }
 
         .search-icon {
             position: absolute;
-            right: 10px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
+            transition: transform 0.3s ease;
         }
 
         .search-input {
             width: 100%;
-            height: 40px;
-            padding: 10px;
-            transition: .2s linear;
-            border: 2.5px solid black;
-            font-size: 14px;
+            height: 50px;
+            padding: 10px 40px 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
             letter-spacing: 1px;
-            border-radius: 5px;
+            background: transparent;
+            color: #333;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
         }
 
         .search-input:focus {
             outline: none;
-            border: 0.5px solid black;
-            box-shadow: -2px -1px 0px black;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.15), inset -3px -3px 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .search-input::placeholder {
+            color: #999;
+            font-style: italic;
         }
 
         .search-container:hover > .search-icon {
@@ -288,29 +651,51 @@
         }
 
         @keyframes anim {
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(-50%) scale(1);
             }
-
             50% {
-                transform: translateY(-50%) scale(1.1);
+                transform: translateY(-50%) scale(1.2);
             }
+        }
+
+        .dark-theme .search-container {
+            background: linear-gradient(145deg, #3a3b3c, #2c2d2e);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-theme .search-container:hover {
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4), -5px -5px 20px rgba(255, 255, 255, 0.15);
         }
 
         .dark-theme .search-input {
-            background-color: #3a3b3c;
             color: #ffffff;
-            border-color: #d8dbe0;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(255, 255, 255, 0.1);
         }
 
         .dark-theme .search-input:focus {
-            border-color: #d8dbe0;
-            box-shadow: -5px -5px 0px #d8dbe0;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4), inset -3px -3px 8px rgba(255, 255, 255, 0.15);
+        }
+
+        .dark-theme .search-input::placeholder {
+            color: #bbbbbb;
         }
 
         .dark-theme .search-icon svg path {
             stroke: #ffffff;
+        }
+
+        .header p {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+        }
+
+        .dark-theme .header p {
+            color: #e0e0e0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .articles {
@@ -349,6 +734,11 @@
             background-color: var(--bg-card);
             border-radius: 1rem;
             justify-content: space-between;
+        }
+
+        .card.main-law {
+            width: 100%;
+            max-width: 800px;
         }
 
         .card.hidden {
@@ -394,7 +784,6 @@
             text-align: justify;
         }
 
-        /* Read More */
         .border-button {
             display: flex;
             align-items: center;
@@ -436,14 +825,92 @@
             transform: translateY(0px);
         }
 
+        .save-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 5px;
+            border-radius: 10px;
+            border: 1px solid rgb(255, 255, 255);
+            overflow: hidden;
+            background: transparent;
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+            align-self: flex-end;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .save-button .button-text {
+            transform: translateX(17px);
+            font-size: 0.9em;
+            font-weight: 500;
+            transition-duration: 0.3s;
+            margin: 0;
+        }
+
+        .save-button .iconer {
+            transform: translateY(35px);
+            transition-duration: 0.3s;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .save-button:hover .button-text {
+            transform: translateX(5px);
+        }
+
+        .save-button:hover .iconer {
+            transform: translateY(0px);
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            margin-left: 290px;
+            z-index: 1;
+            transition: margin-left 0.3s ease;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 5px;
+        }
+
+        .footer-links a {
+            color: #d7b15c;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .dark-theme footer {
+            background-color: #1a1a1a;
+        }
+
         body.dark-theme {
-            background-color: #28292c;
-            color: #d8dbe0;
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
         .dark-theme .content {
             background-color: #28292c;
-            color: #d8dbe0;
+        }
+
+        .dark-theme .content::before {
+            background-color: rgba(40, 41, 44, 0.9);
         }
 
         .dark-theme .articles {
@@ -464,10 +931,9 @@
             color: #ffffff;
         }
 
-        /* Mobile Navigation Styles */
         .mobile-nav {
             display: none;
-            background-color: #8B0000;
+            background-image: url('https://i.imgur.com/bNRxAhZ.png');
             padding: 15px;
             position: fixed;
             width: 100%;
@@ -511,12 +977,50 @@
                 margin-left: 250px;
             }
 
+            footer {
+                margin-left: 250px;
+            }
+
             .card {
                 width: 300px;
             }
 
+            .card.main-law {
+                width: 100%;
+                max-width: 600px;
+            }
+
+            .account-customization {
+                right: 10px;
+            }
+
+            .avatar-container .profile-pic {
+                width: 35px;
+                height: 35px;
+            }
+
+            .avatar-loading {
+                width: 35px;
+                height: 35px;
+            }
+
+            .customization-options {
+                top: 45px;
+                width: 220px;
+            }
+
             .search-container {
                 width: 50%;
+            }
+
+            .fingerprint-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .fingerprint-icon::before {
+                width: 108px;
+                height: 110px;
             }
         }
 
@@ -543,12 +1047,36 @@
                 padding: 10px;
             }
 
+            footer {
+                margin-left: 200px;
+            }
+
             .card {
                 width: 100%;
                 max-width: 350px;
             }
 
-            .fingerprint-icon {
+            .card.main-law {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .avatar-container .profile-pic {
+                width: 30px;
+                height: 30px;
+            }
+
+            .avatar-loading {
+                width: 30px;
+                height: 30px;
+            }
+
+            .customization-options {
+                top: 40px;
+                width: 200px;
+            }
+
+            .fingerprint-container {
                 width: 120px;
                 height: 120px;
             }
@@ -604,22 +1132,72 @@
                 padding: 80px 10px 10px;
             }
 
-            .fingerprint-icon {
+            footer {
+                margin-left: 0;
+                padding: 10px 20px;
+                text-align: center;
+            }
+
+            footer p {
+                font-size: 12px;
+            }
+
+            .footer-links a {
+                font-size: 12px;
+                margin: 0 8px;
+            }
+
+            .account-customization {
+                top: 70px;
+                right: 10px;
+                z-index: 998;
+            }
+
+            .avatar-container .profile-pic {
+                width: 30px;
+                height: 30px;
+                border-width: 1px;
+            }
+
+            .avatar-loading {
+                width: 30px;
+                height: 30px;
+            }
+
+            .avatar-loading .loader {
+                width: 15px;
+                height: 15px;
+                border-width: 2px;
+            }
+
+            .customization-options {
+                top: 40px;
+                width: 180px;
+            }
+
+            .customization-options .user-info p {
+                font-size: 10px;
+            }
+
+            .customization-options label,
+            .customization-options .file-input-label {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+
+            .customization-options select {
+                font-size: 10px;
+                padding: 3px;
+            }
+
+            .fingerprint-container {
                 width: 90px;
                 height: 90px;
             }
 
             .fingerprint-icon::before {
-                content: "";
-                position: absolute;
-                margin-right: 4px;
-                margin-top: 4px;
-                width: 96px;
-                height: 93px;
-                border: 3px solid;
-                border-radius: 50%;
-                z-index: 0;
-                color: #000000;
+                width: 78px;
+                height: 80px;
             }
 
             .search-container {
@@ -630,6 +1208,11 @@
                 width: 100%;
                 max-width: 100%;
             }
+
+            .card.main-law {
+                width: 100%;
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -637,7 +1220,6 @@
     <div class="loader-overlay" id="loaderOverlay">
         <div class="loader"></div>
     </div>
-    <!-- Mobile Navigation Bar -->
     <div class="mobile-nav">
         <a href="#" class="logo">Contra E-Crime</a>
         <div class="menu-icon" id="mobileMenuIcon">
@@ -651,52 +1233,50 @@
             <ul>
                 <li>
                     <a href="HomePage.html">
-                        <img src="https://iili.io/3n05R2f.png" alt="Home">
+                        <img src="https://i.imgur.com/OAHusQp.png" alt="Home">
                         Home
                     </a>
                 </li>
                 <li>
                     <a href="News.html">
-                        <img src="https://iili.io/3n05Yp2.png" alt="News & Insights">
+                        <img src="https://i.imgur.com/FNALwXX.png" alt="News & Insights">
                         News & Insights
                     </a>
                 </li>
                 <li>
                     <a href="SavedLaws.html">
-                        <img src="https://iili.io/3n05574.png" alt="Saved Laws">
+                        <img src="https://i.imgur.com/VChoqhD.png" alt="Saved Laws">
                         Saved Laws
                     </a>
                 </li>
                 <li>
                     <a href="History.html">
-                        <img src="https://iili.io/3n057kl.png" alt="Search History">
+                        <img src="https://i.imgur.com/cnaDfEq.png" alt="Search History">
                         Search History
                     </a>
                 </li>
                 <li>
                     <a href="ContactUs.html">
-                        <img src="https://iili.io/3n05cIS.png" alt="Contact Us">
+                        <img src="https://i.imgur.com/T7bI4RJ.png" alt="Contact Us">
                         Contact Us
                     </a>
                 </li>
                 <li>
                     <a href="AboutUs.html">
-                        <img src="https://iili.io/3n05lh7.png" alt="About Us">
+                        <img src="https://i.imgur.com/lktrzpa.png" alt="About Us">
                         About Us
                     </a>
                 </li>
                 <li>
                     <a href="index.html">
-                        <img src="https://iili.io/3n050Q9.png" alt="Logout">
+                        <img src="https://i.imgur.com/2jjsgOq.png" alt="Logout">
                         Logout
                     </a>
                 </li>
             </ul>
-
-            <!-- Dark Theme Container -->
             <div class="dark-theme-container">
                 <div class="dark-theme-label">
-                    <img src="https://iili.io/3n05EBe.png" alt="Dark Theme">
+                    <img src="https://i.imgur.com/vEKpOsq.png" alt="Dark Theme">
                     <span>Dark Theme</span>
                 </div>
                 <div class="toggle-switch">
@@ -709,105 +1289,697 @@
         </nav>
         <main class="content">
             <div class="header">
-                <div class="fingerprint-icon"></div>
+                <div class="account-customization">
+                    <div class="user-details">
+                        <!-- Hidden by default -->
+                    </div>
+                    <div class="avatar-container">
+                        <img class="profile-pic" id="profilePic" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/4L1mGQAAAAASUVORK5CYII=" alt="User Avatar">
+                        <div class="avatar-loading" id="avatarLoading">
+                            <div class="loader"></div>
+                        </div>
+                        <div class="customization-options" id="customizationMenu">
+                            <div class="user-info" id="userInfo">
+                                <p id="usernameDisplay" data-label="Username:">Loading...</p>
+                                <p id="emailDisplay" data-label="Email:">Loading...</p>
+                                <p id="createdAtDisplay" data-label="Account Created:">Loading...</p>
+                            </div>
+                            <label class="file-input-label" for="avatarInput">Change Avatar</label>
+                            <input type="file" id="avatarInput" accept="image/jpeg,image/png,image/jpg">
+                            <label for="avatarBgColorPicker">Avatar Background Color</label>
+                            <input type="color" id="avatarBgColorPicker" value="#cccccc">
+                            <label for="borderColorPicker">Border Color</label>
+                            <input type="color" id="borderColorPicker" value="#000000">
+                            <label for="borderTypeSelect">Border Type</label>
+                            <select id="borderTypeSelect">
+                                <option value="solid">Solid</option>
+                                <option value="dashed">Dashed</option>
+                                <option value="dotted">Dotted</option>
+                                <option value="double">Double</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="fingerprint-container">
+                    <div class="fingerprint-icon" id="fingerprintIcon">
+                        <div class="scan-line"></div>
+                        <div class="scan-line"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                </div>
                 <div class="search-container">
                     <input type="text" class="search-input" id="searchInput" placeholder="Ask anything...">
-                    <span class="search-icon"> 
+                    <span class="search-icon">
                         <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="1" d="M14 5H20" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="1" d="M14 8H17" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M21 11.5C21 16.75 16.75 21 11.5 21C6.25 21 2 16.75 2 11.5C2 6.25 6.25 2 11.5 2" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="1" d="M22 22L20 20" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                     </span>
                 </div>
                 <p>Find the right law for you!</p>
             </div>
             <section class="articles">
-                <h2>TOP ARTICLES</h2>
+                <h2 id="sectionTitle">TOP ARTICLES</h2>
                 <div class="cards-container" id="cardsContainer">
-                    <!-- Card 1 -->
-                    <div class="card" data-title="Hacking">
-                        <div class="image_container">
-                            <img src="https://static.toiimg.com/thumb/msid-117988403,width-1280,height-720,resizemode-4/117988403.jpg" alt="Cybercrime Image">
-                        </div>
-                        <div class="cybercrime-title">
-                            <span>Hacking</span>
-                        </div>
-                        <div class="cybercrime-description">
-                            <p>Cybercrime</p>
-                            <p>Introduced in 1995</p>
-                            <p>The crime of unauthorized access to private computers or networks and misuse of it either by shutting it down or tampering with the data stored or other illegal approaches.</p>
-                        </div>
-                        <a href="News.html" class="border-button">
-                            <span class="button-text">Read More</span>
-                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>  
-                        </a>
-                    </div>
-            
-                    <!-- Card 2 -->
-                    <div class="card" data-title="Phishing and Scam">
-                        <div class="image_container">
-                            <img src="https://safeonline.security.vt.edu/content/safeonline_security_vt_edu/en/phishing/_jcr_content/article-image.transform/m-medium/image.jpeg" alt="Cybercrime Image">
-                        </div>
-                        <div class="cybercrime-title">
-                            <span>Phishing and Scam</span>
-                        </div>
-                        <div class="cybercrime-description">
-                            <p>Cybercrime</p>
-                            <p>Introduced in 1990</p>
-                            <p>A type of social engineering attack that targets the user and tricks them by sending fake messages and emails to get sensitive information about the user or trying to download malicious software and exploit it on the target system.</p>
-                        </div>
-                        <a href="News.html" class="border-button">
-                            <span class="button-text">Read More</span>
-                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>  
-                        </a>
-                    </div>
-            
-                    <!-- Card 3 -->
-                    <div class="card" data-title="Internet Fraud">
-                        <div class="image_container">
-                            <img src="https://gdprinformer.com/wp-content/uploads/2017/09/fraud-laptop.jpg" alt="Cybercrime Image">
-                        </div>
-                        <div class="cybercrime-title">
-                            <span>Internet Fraud</span>
-                        </div>
-                        <div class="cybercrime-description">
-                            <p>Cybercrime</p>
-                            <p>Introduced in 1994</p>
-                            <p>Makes use of the internet and it can be considered a general term that groups all of the crimes that happen over the internet like spam, banking frauds, theft of service, etc.</p>
-                        </div>
-                        <a href="News.html" class="border-button">
-                            <span class="button-text">Read More</span>
-                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>  
-                        </a>
-                    </div>
-            
-                    <!-- Card 4 -->
-                    <div class="card" data-title="Ransomware Attack">
-                        <div class="image_container">
-                            <img src="https://riskonnect.com/wp-content/uploads/2024/09/Blog-Image-How-to-Lessen-the-Pain-of-Ransomware-Attacks-3.webp" alt="Cybercrime Image">
-                        </div>
-                        <div class="cybercrime-title">
-                            <span>Ransomware Attack</span>
-                        </div>
-                        <div class="cybercrime-description">
-                            <p>Cybercrime</p>
-                            <p>Introduced in 1989</p>
-                            <p>A type of malware that has the capability to prevent users from accessing all of their personal data on the system by encrypting them and then asking for a ransom in order to give access to the encrypted data.</p>
-                        </div>
-                        <a href="News.html" class="border-button">
-                            <span class="button-text">Read More</span>
-                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>  
-                        </a>
-                    </div>
+                    <!-- Laws will be dynamically populated here -->
                 </div>
             </section>
         </main>
+        <footer>
+            <p>© 2025 Contra E-Crime. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="PrivacyPolicy.html">Privacy Policy</a>
+                <a href="TermsOfUse.html">Terms of Use</a>
+                <a href="ContactUs.html">Contact Us</a>
+            </div>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDNmxNOV7rr_qfM_mTeYTaUIkkLvRaf80",
+            authDomain: "contra-e-crime.firebaseapp.com",
+            projectId: "contra-e-crime",
+            storageBucket: "contra-e-crime.firebasestorage.app",
+            messagingSenderId: "198995444405",
+            appId: "1:198995444405:web:5f8c6eed561461b36034fc",
+            databaseURL: "https://contra-e-crime-default-rtdb.firebaseio.com"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        const CLOUDINARY_CLOUD_NAME = 'dkxtbukta';
+        const CLOUDINARY_UPLOAD_PRESET = 'contraecrime';
+
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         const mobileMenuIcon = document.getElementById('mobileMenuIcon');
         const sidebar = document.getElementById('sidebar');
         const loaderOverlay = document.getElementById('loaderOverlay');
+        const profilePic = document.getElementById('profilePic');
+        const customizationMenu = document.getElementById('customizationMenu');
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarLoading = document.getElementById('avatarLoading');
+        const avatarBgColorPicker = document.getElementById('avatarBgColorPicker');
+        const borderColorPicker = document.getElementById('borderColorPicker');
+        const borderTypeSelect = document.getElementById('borderTypeSelect');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const emailDisplay = document.getElementById('emailDisplay');
+        const createdAtDisplay = document.getElementById('createdAtDisplay');
+        const searchInput = document.getElementById('searchInput');
+        const fingerprintIcon = document.getElementById('fingerprintIcon');
+        const cardsContainer = document.getElementById('cardsContainer');
+        const sectionTitle = document.getElementById('sectionTitle');
+
+        // Laws data (simplified for brevity)
+        const laws = [
+    {
+        title: "Intellectual Property Code of the Philippines (Republic Act No. 8293)",
+        description: "Protects and enforces the rights of creators and owners of intellectual property, including copyrights, trademarks, patents, and industrial designs.",
+        scenario: "A business using a copyrighted song in its marketing materials without permission from the copyright holder.",
+        punishment: "For the first offense: Imprisonment of 1 to 3 years and a fine of ₱50,000 to ₱150,000. For the second offense: Imprisonment of 3 years and 1 day to 6 years and a fine of ₱150,000 to ₱500,000. For third and subsequent offenses: Imprisonment of 6 years and 1 day to 9 years and a fine of ₱500,000 to ₱1,500,000.",
+        image: "https://newsline.ph/wp-content/uploads/2024/10/IPO.jpg",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/4371"
+    },
+    {
+        title: "Terrorism Financing Prevention and Suppression Act (Republic Act No. 10168)",
+        description: "Criminalizes the financing of terrorism and related offenses, aiming to prevent and suppress such acts by freezing and forfeiting associated properties or funds.",
+        scenario: "A group of individuals using a legitimate business to funnel funds to terrorist organizations.",
+        punishment: "Imprisonment from reclusion temporal (maximum period) to reclusion perpetua and fines of ₱500,000 to ₱1,000,000. Administrative penalties include fines from ₱100,000 to ₱500,000.",
+        image: "https://api.phkule.org/storage/photos/mLOPcQRdubQOvWmnMTqX0mUMYlawV5eXGY4EqyEl.png",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/37689"
+    },
+    {
+        title: "Anti-Money Laundering Act of 2001 (Republic Act No. 9160)",
+        description: "Defines and criminalizes money laundering, preventing the use of the financial system for laundering proceeds of illegal activities, with provisions for asset freezing and international cooperation.",
+        scenario: "A criminal deposits drug trafficking proceeds into a legitimate business account, using it to purchase real estate and assets.",
+        punishment: "Imprisonment of 7 to 14 years and a fine of at least ₱3,000,000 or up to twice the asset value for transacting illicit funds. Facilitation carries 4 to 7 years and a fine of ₱1,500,000 to ₱3,000,000.",
+        image: "https://bitpinas.com/wp-content/uploads/2017/11/anti-money-laundering-3.png",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/10/44124"
+    },
+    {
+        title: "National Bureau of Investigation Reorganization Act (Republic Act No. 10867)",
+        description: "Enhances the NBI's investigative capabilities by reorganizing and modernizing the agency, establishing a clear structure, and expanding its powers and functions.",
+        scenario: "The NBI Cybercrime Division raids a group operating a phishing scam using fake online banking portals.",
+        punishment: "Penalties depend on specific cybercrimes investigated, as outlined in relevant laws like the Cybercrime Prevention Act (e.g., imprisonment of 6 to 12 years and fines of ₱200,000 or more).",
+        image: "https://assistance.ph/wp-content/uploads/2023/12/nbi.jpg",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/67908"
+    },
+    {
+        title: "Mobile Number Portability Act (Republic Act No. 11202)",
+        description: "Allows mobile subscribers to switch telecommunications providers while retaining their numbers, promoting consumer welfare and choice.",
+        scenario: "A scammer ports a number associated with a legitimate business to perpetrate scams or identity theft.",
+        punishment: "Fines of ₱10,000 for initial delays, ₱40,000 to ₱1,000,000 for unjust refusal, and ₱400,000 to ₱1,000,000 with possible franchise revocation for repeated offenses.",
+        image: "https://static.tripzilla.ph/media/102907/conversions/mobile-number-portability-2-w768.webp",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/64176"
+    },
+    {
+        title: "Safe Spaces Act (Republic Act No. 11313)",
+        description: "Protects individuals from gender-based sexual harassment in public spaces, online, workplaces, and educational institutions, defining and penalizing various forms of harassment.",
+        scenario: "A person receives inappropriate, sexual messages in a group chat despite not expressing interest.",
+        punishment: "Verbal harassment: ₱1,000 fine and community service for first offense, up to 30 days imprisonment and ₱10,000 fine for third offense. Lewd acts: ₱10,000 fine for first offense, up to 6 months imprisonment and ₱20,000 fine for third offense.",
+        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEirkYMjV2TfdB0Bow9Ogb4SrlNynpEH1ZLrRa6JImmu5cBs80cBzVCc9ctM1O69ly9pDLg08qk2185e2z9uNueciTzn0dnBsuK2BD1V4GWDHPwTdjBTSbgisQrJfbmHcLh6zB9s7zRSG7y_IZu-Cx7eQCr451ep8cN5hR2Ab6wmC5IRLYjeK23EiQ/w640-h360/Tara%20Kape!%20(SITE)%20(4).png",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/96805"
+    },
+    {
+        title: "New Central Bank Act (Republic Act No. 7653)",
+        description: "Establishes the Bangko Sentral ng Pilipinas as the central monetary authority, promoting price and financial stability with fiscal and administrative autonomy.",
+        scenario: "A bank director takes an undisclosed loan from their bank, violating Monetary Board regulations.",
+        punishment: "Imprisonment of 5 to 10 years for unauthorized note issuance. Fines up to ₱2,000,000 and imprisonment up to 5 years for false statements.",
+        image: "https://cdn.slidesharecdn.com/ss_thumbnails/bsp-banking-law-150818155013-lva1-app6891-thumbnail.jpg?width=560&fit=bounds",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/2027"
+    },
+    {
+        title: "Anti-Wire Tapping Act (Republic Act No. 4200)",
+        description: "Prohibits unauthorized wiretapping and violations of communication privacy, including intercepting or recording communications without consent.",
+        scenario: "A person secretly records a confidential business meeting using a dictaphone without participants' consent.",
+        punishment: "Imprisonment of 6 months to 6 years, with perpetual disqualification from public office for public officials and deportation for aliens.",
+        image: "https://philippinelawfirm.com/wp-content/uploads/2023/10/gen12-wiretapping_2018-12-02_21-43-46.jpg",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/4442"
+    },
+    {
+        title: "Human Security Act of 2007 (Republic Act No. 9372)",
+        description: "Protects the Philippines from terrorism by defining terrorism crimes and providing prevention and suppression mechanisms.",
+        scenario: "A bomb threat at a public event leads to the arrest of a suspect under the law’s provisions.",
+        punishment: "Joining terrorist organizations: 12 years imprisonment. Assisting terrorists: 10 years and 1 day to 12 years. Conspiracy to commit terrorism: Life imprisonment without parole.",
+        image: "https://media.philstar.com/images/articles/marawi-clashes_2018-02-07_15-04-35.jpg",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/5340"
+    },
+    {
+        title: "Anti-Terrorism Act of 2020 (Republic Act No. 11449)",
+        description: "Aims to prevent, prohibit, and penalize terrorism, defining terrorism offenses and providing for detention, surveillance, and asset forfeiture.",
+        scenario: "Individuals release dangerous substances to intimidate the public, violating terrorism laws.",
+        punishment: "Terrorism and conspiracy to commit terrorism: Life imprisonment without parole and fines of ₱1,000,000 to ₱5,000,000. Financing terrorism: Reclusion temporal to reclusion perpetua and fines of ₱500,000 to ₱1,000,000.",
+        image: "https://files01.pna.gov.ph/category-list/2020/07/07/anti-terror-law.jpg",
+        pdf: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocsfriendly/2/92597"
+    },
+    {
+        title: "Anti-Bullying Act of 2013 (Republic Act No. 10627)",
+        description: "Requires schools to implement anti-bullying policies, defining bullying as severe or repeated acts causing fear or disrupting education.",
+        scenario: "An elementary student is teased by classmates for poor penmanship, with peers disrupting their notebook during lessons.",
+        punishment: "School employees: Fines of ₱50,000 to ₱100,000 or imprisonment of 6 months to 1 year. Private schools: Suspension or revocation of permits. Public school personnel: Administrative disciplinary proceedings.",
+        image: "https://images.app.goo.gl/HPxWVGGP1gTZnfpc6",
+        pdf: "https://elegal.ph/site/wp-content/uploads/2015/07/RA-10627.pdf"
+    },
+    {
+        title: "Department of Information and Communications Technology Act (Republic Act No. 10844)",
+        description: "Establishes the DICT to develop and implement ICT policies, ensuring consumer protection, data privacy, and sector growth.",
+        scenario: "A local government unit in Fairview, Quezon City, faces phishing attacks targeting employees, risking public safety and data confidentiality.",
+        punishment: "Unauthorized data processing: Imprisonment of 3 to 6 years and fines of ₱500,000 to ₱4,000,000. Cybercrime penalties vary by offense.",
+        image: "https://images.app.goo.gl/63vCtVZjWfn9ENr28",
+        pdf: "https://cms-cdn.e.gov.ph/DICT/pdf/RA10844_DICT.pdf"
+    },
+    {
+        title: "Strategic Trade Management Act (Republic Act No. 10697)",
+        description: "Prevents the proliferation of weapons of mass destruction by managing trade in strategic goods and related services.",
+        scenario: "A company exports a dual-use computer chip without proper authorization, risking military misuse.",
+        punishment: "Fines up to ₱250,000 or twice the value of the strategic good. Imprisonment from 6 months to 12 years. Suspension or cancellation of business registration.",
+        image: "https://images.app.goo.gl/LzxspNHJEgFpxohn7",
+        pdf: "https://233773342789-lic.s3.eu-central-1.amazonaws.com/attachments/legislation/philippines/Implementing%20Rules%20of%20the%20Strategic%20Trade%20Management%20Act_25.09.2018.pdf"
+    },
+    {
+        title: "Energy Virtual One-Stop Shop Act (Republic Act No. 11234)",
+        description: "Establishes a web-based system for filing and monitoring energy-related applications and permits.",
+        scenario: "A company uses EVOSS to submit documents and track progress for a solar power plant application.",
+        punishment: "A fine of ₱100,000 for every day of delay.",
+        image: "https://images.app.goo.gl/K1QNfksaXf2FFqPx7",
+        pdf: "https://evoss.ph/Home/Download/135253"
+    },
+    {
+        title: "Consumer Act of the Philippines (Republic Act No. 7394)",
+        description: "Protects consumers from health hazards, deceptive practices, and unfair sales, providing education and redress mechanisms.",
+        scenario: "A consumer purchases a defective product with a 'No Return, No Exchange' policy, entitled to repair, replacement, or refund under the Act.",
+        punishment: "Deceptive sales: Fines of ₱500 to ₱10,000 or imprisonment of 5 months to 1 year. Weights and measures violations: Fines of ₱50,000 to ₱300,000 or imprisonment of 1 to 5 years.",
+        image: "https://images.app.goo.gl/1FYipzHQygJ1DYU19",
+        pdf: "https://aseanconsumer.org/file/pdf_file/Republic%20Act%20No.%207394%20-%20The%20Consumer%20Act%20of%201992.pdf"
+    },
+    {
+        title: "Optical Media Act of 2003 (Republic Act No. 9239)",
+        description: "Protects intellectual property rights by regulating the mastering, manufacture, and distribution of optical media, preventing piracy.",
+        scenario: "An unregistered company illegally manufactures and distributes pirated DVDs without an OMB license.",
+        punishment: "Imprisonment of 3 to 6 years and fines of ₱500,000 to ₱1,500,000.",
+        image: "https://images.app.goo.gl/qpGKLPRPxvqbE3zE8",
+        pdf: "https://www.pntr.gov.ph/wp-content/uploads/2021/04/RA-9239.pdf"
+    },
+    {
+        title: "National Cybersecurity Plan Framework (Executive Order No. 189, 2015)",
+        description: "Addresses cyber threats by establishing a framework for safeguarding government and commercial information systems.",
+        scenario: "The NCIAC assesses a cyberattack’s impact on critical systems, identifying the source and coordinating responses.",
+        punishment: "Hacking: Imprisonment of 6 to 12 years and fines up to ₱500,000. Identity theft: Imprisonment up to 12 years and fines of ₱50,000 to ₱500,000.",
+        image: "https://images.app.goo.gl/8bCWhFxQJzQTp3Jh6",
+        pdf: "https://cms-cdn.e.gov.ph/DICT/pdf/NCSP-2023-2028-FINAL-DICT.pdf"
+    },
+    {
+        title: "Strengthening DICT’s Cybersecurity Role (Executive Order No. 82, 2022)",
+        description: "Bolsters digital defenses and fosters cybersecurity awareness and responsibility across the Philippines.",
+        scenario: "A government agency conducts cybersecurity training to protect against phishing attacks targeting employees.",
+        punishment: "Penalties align with the Cybercrime Prevention Act, including imprisonment of 6 to 12 years and fines of ₱200,000 or more for cybercrimes.",
+        image: "https://images.app.goo.gl/R8JVMBaQbYLUWYED6",
+        pdf: "https://cms-cdn.e.gov.ph/DICT/pdf/NCSP-2023-2028-FINAL-DICT.pdf"
+    },
+    {
+        title: "National Cybersecurity Inter-Agency Committee (Executive Order No. 95, 2019)",
+        description: "Coordinates government efforts to safeguard ICT infrastructure, harmonizing cybersecurity initiatives.",
+        scenario: "The committee strengthens defenses during phishing attacks targeting government email systems.",
+        punishment: "Cybercrime penalties include imprisonment of 6 to 12 years and fines of ₱200,000 or more, as per the Cybercrime Prevention Act.",
+        image: "https://cdn.opengovasia.com/wp-content/uploads/2023/05/PH_2_1270-39.jpg",
+        pdf: "https://lawphil.net/executive/execord/eo2019/pdf/eo_95_2019.pdf"
+    },
+    {
+        title: "Guidelines on IT Risk Management (BSP Circular No. 808, 2013)",
+        description: "Strengthens risk management and consumer protection in banks and BSP-supervised institutions through IT security measures.",
+        scenario: "A bank implements multi-factor authentication and updates firewalls to protect customer data from cyber threats.",
+        punishment: "Monetary fines, operational restrictions, or contract invalidation for non-compliance.",
+        image: "https://www.gmanews.tv/v3/webpics/v3/2015/04/2015_04_17_16_53_36_0.jpg",
+        pdf: "https://www.bsp.gov.ph/Regulations/Issuances/2013/c808.pdf"
+    },
+    {
+        title: "Enhanced Information Security Management (BSP Circular No. 982, 2017)",
+        description: "Requires BSFIs to establish robust technology risk management, governance, and cybersecurity controls.",
+        scenario: "A bank appoints an Information Security Officer and conducts regular risk assessments to secure online transactions.",
+        punishment: "Fines, license suspension/revocation, or actions against responsible officers for non-compliance.",
+        image: "https://www.securitymagazine.com/ext/resources/Issues/2019/September/SEC0919-Mobile-Feat-slide1_900px.jpg?1567784812",
+        pdf: "https://www.bsp.gov.ph/Regulations/Issuances/2017/c982.pdf"
+    },
+    {
+        title: "Technology and Cyber-Risk Reporting (BSP Circular No. 1019, 2018)",
+        description: "Tightens reporting of technology and cyber-risk incidents to enhance BSP’s cyber-threat surveillance and protect payment systems.",
+        scenario: "A financial institution reports cyber incidents to senior management for timely response and decision-making.",
+        punishment: "Fines per MORB/MORNBFI, suspension of product offerings, license revocation, or settlement authority suspension.",
+        image: "https://www.bworldonline.com/wp-content/uploads/2024/10/cybersecurity.jpg",
+        pdf: "https://www.bsp.gov.ph/Regulations/Issuances/2018/c1019.pdf"
+    },
+    {
+        title: "Guidelines on Operational Risk Management (BSP Circular No. 900, 2015)",
+        description: "Promotes effective risk management systems in BSFIs to address operational risks from processes, people, systems, or external events.",
+        scenario: "A bank employee accidentally emails confidential client data to the wrong address, highlighting the need for robust data handling.",
+        punishment: "Suspension of rediscounting, dividend declaration, branching privileges, or other non-monetary sanctions.",
+        image: "https://www.riskpro.in/sites/default/files/styles/large/public/Operational%20Risk%20Management_1.jpg?itok=N4UoME9w",
+        pdf: "https://rbap.org/wp-content/uploads/2016/01/c900-Guidelines-on-Operational-Risk-Management.pdf"
+    },
+    {
+        title: "Guidelines on Business Continuity Management (BSP Circular No. 951, 2017)",
+        description: "Emphasizes robust business continuity management to ensure critical operations during disruptions, with clear roles for management.",
+        scenario: "A company develops a disaster recovery plan to maintain operations during a natural disaster.",
+        punishment: "Fines or operational restrictions for non-compliance, as determined by the BSP.",
+        image: "https://www.asisonline.org/globalassets/standards-and-guidelines/bcm-2021/business-continuity-banner-1536px.jpg",
+        pdf: "https://www.bsp.gov.ph/Regulations/Issuances/2017/c951.pdf"
+    },
+    {
+        title: "Guidelines on Outsourcing Risk Management (BSP Circular No. 1039, 2019)",
+        description: "Outlines requirements for pawnshops and MSBs, including licensing and electronic reporting for remittance and virtual currency transactions.",
+        scenario: "A bank assesses an external provider’s security protocols before outsourcing customer support operations.",
+        punishment: "Monetary fines for reporting infractions or license revocation for severe non-compliance.",
+        image: "https://resourcecenter.infinit-o.com/wp-content/uploads/2020/01/Infinit-O-Finance-Accounting-Outsourcing-Risk-Management.png",
+        pdf: "https://www.bsp.gov.ph/Regulations/Issuances/2019/c1039.pdf"
+    },
+    {
+        title: "Adoption of PNS ISO/IEC 27002 (DICT Memorandum Circular No. 005, 2017)",
+        description: "Mandates adoption of international security standards to protect Critical Information Infrastructure under the National Cybersecurity Plan.",
+        scenario: "A government agency adopts standardized security protocols and conducts risk assessments to protect ICT systems.",
+        punishment: "Penalties align with the Cybercrime Prevention Act, including imprisonment of 6 to 12 years and fines of ₱200,000 or more.",
+        image: "https://trendsresearch.org/wp-content/uploads/2025/01/Cybersecurity-in-a-World-increasingly-in-Crisis-V1-copy.jpg",
+        pdf: "https://www.scribd.com/document/668954225/Memorandum-Circular-005"
+    },
+    {
+        title: "Protection of Individuals under Cybersecurity Plan (DICT Memorandum Circular No. 007, 2022)",
+        description: "Promotes cybersecurity awareness and security measures to protect individuals, including campaigns and adoption of cybersecurity practices.",
+        scenario: "A government agency launches a campaign teaching citizens to avoid phishing scams and report cyber incidents.",
+        punishment: "Penalties align with the Cybercrime Prevention Act, including imprisonment of 6 to 12 years and fines of ₱200,000 or more.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWQ4GS9KMQg29NRva5dGI4sBS_bJBZu_YZkA&s",
+        pdf: "https://law.upd.edu.ph/wp-content/uploads/2020/05/DICT-DC-007-2020.pdf"
+    },
+    {
+        title: "Cloud First Policy (DICT Department Circular No. 2017-002)",
+        description: "Mandates government agencies to prioritize cloud computing solutions for IT infrastructure while adhering to security standards.",
+        scenario: "The DSWD implements a cloud-based system for managing social welfare programs.",
+        punishment: "Administrative sanctions for non-compliance, as determined by DICT regulations.",
+        image: "https://elegal.ph/site/wp-content/uploads/2017/02/cloud.jpg",
+        pdf: "https://www.jetro.go.jp/ext_images/jetro/activities/support/aseanjapan/report/3-6.pdf"
+    },
+    {
+        title: "Guidelines on Government Email System (DICT Memorandum Circular No. 003, 2020)",
+        description: "Establishes standards for secure and efficient government email systems to enhance communication and data protection.",
+        scenario: "A government agency implements encrypted email systems to protect sensitive communications from cyber threats.",
+        punishment: "Penalties align with the Data Privacy Act, including imprisonment of 3 to 6 years and fines of ₱500,000 to ₱4,000,000 for unauthorized data processing.",
+        image: "https://elegal.ph/site/wp-content/uploads/2017/02/cloud.jpg",
+        pdf: "https://dict.gov.ph/wp-content/uploads/2020/07/MC-003-2020.pdf"
+    },
+    {
+        title: "Value-Added Services Regulation (NTC Memorandum Circular No. 02-05-2008)",
+        description: "Regulates enhanced telecommunications services like messaging and VoIP, outlining registration and compliance for VAS providers.",
+        scenario: "A VoIP provider offers internet-based voice calls without NTC registration, violating VAS regulations.",
+        punishment: "Revocation or cancellation of VAS provider registration for violations.",
+        image: "https://images.app.goo.gl/pwhoMYMUUE6MUc5G9",
+        pdf: "https://region7.ntc.gov.ph/wp-content/uploads/2024/01/MC_02-05-2008_VAS.pdf"
+    },
+    {
+        title: "Broadcast Messaging Regulation (NTC Memorandum Circular No. 03-03-2005-A)",
+        description: "Sets guidelines for sending broadcast messages, requiring explicit opt-in consent from subscribers.",
+        scenario: "A bank sends promotional texts without customer consent, violating opt-in requirements.",
+        punishment: "Fines for less than 50 violations, blacklisting, and permit revocation for over 50 violations per quarter.",
+        image: "https://images.app.goo.gl/Fbc63YjxjkrFci5Y6",
+        pdf: "https://region7.ntc.gov.ph/wp-content/uploads/2024/01/MC_03-03-2005.pdf"
+    },
+    {
+        title: "Guidelines on Prepaid Load Expiry (NTC Memorandum Circular No. 01-04-2019)",
+        description: "Mandates a one-year expiration period for all prepaid loads, covering telecommunications and ICT providers.",
+        scenario: "A user’s ₱100 prepaid load purchased on April 1, 2025, expires on April 1, 2026, per NTC guidelines.",
+        punishment: "Penalties per the Public Telecommunications Policy Act and DICT Act, including fines and sanctions.",
+        image: "https://images.app.goo.gl/hHoAc5rnDu44BBZ87",
+        pdf: "https://region7.ntc.gov.ph/wp-content/uploads/2024/01/MC_03-07-2009.pdf"
+    },
+    {
+        title: "Social Media and AI Election Guidelines (COMELEC Resolution No. 11064, 2024)",
+        description: "Mandates registration of digital campaign platforms by December 13, 2024, ensuring transparency in AI usage and monitoring disinformation.",
+        scenario: "A candidate uses AI-generated content without disclosing its use, violating transparency requirements.",
+        punishment: "Penalties for coordinated inauthentic behavior, deep fakes, and unregistered accounts, as per COMELEC regulations.",
+        image: "https://images.app.goo.gl/YTCcpHT2MeTVFfUWA",
+        pdf: "https://comelec.gov.ph/php-tpls-attachments/2025NLE/Resolutions/com_res_11064.pdf"
+    },
+    {
+        title: "Online Pharmaceutical Sales Regulation (FDA Administrative Order No. 2013-0027)",
+        description: "Regulates pharmaceutical distribution and storage, including online sales, to ensure quality and compliance with international standards.",
+        scenario: "An online pharmacy sells substandard drugs without proper storage, violating FDA regulations.",
+        punishment: "Fines, license suspension, or other sanctions per RA 9711 and related regulations.",
+        image: "https://images.app.goo.gl/9jZGSGUy5a1SYH118",
+        pdf: "https://www.fda.gov.ph/wp-content/uploads/2021/04/Administrative-Order-No.-2013-0027.pdf"
+    },
+    {
+        title: "E-Commerce Protection Guidelines (DTI Administrative Order No. 22-01)",
+        description: "Ensures consumer protection in e-commerce by mandating fair practices and transparency for online businesses.",
+        scenario: "A consumer receives a counterfeit product from an online seller who refuses a refund, violating transparency rules.",
+        punishment: "Fines, permit revocation, or legal action for violations, as per the Joint Administrative Order.",
+        image: "https://images.app.goo.gl/FPThS1qkqmuRPyDv5",
+        pdf: "https://www.aseanconsumer.org/file/post_image/JAO%20NO.%2022-01.Guidelines%20on%20Online%20Businesses.pdf"
+    },
+    {
+        title: "Guidelines on Cybercrime Prosecution (DOJ Circular No. 027, 2018)",
+        description: "Focuses on prosecuting cybercrimes affecting data confidentiality, integrity, and availability, including illegal access and data interference.",
+        scenario: "A suspect charged with illegal drug sales under RA 9165 faces prosecution without plea bargaining, per DOJ guidelines.",
+        punishment: "Imprisonment from prision correccional (6 months and 1 day to 6 years) to prision mayor (6 years and 1 day to 12 years), depending on the offense.",
+        image: "https://images.app.goo.gl/2Quowehw8U4pqCPH8",
+        pdf: "https://www.doj.gov.ph/files/2018/DC/DC027-2018JUN%20Amended%20Guidelines%20for%20Plea%20Bargaining%20dtd%2026%20Jun%202018(1).pdf"
+    },
+    {
+        title: "PNP Anti-Cybercrime Group Operational Guidelines (PNP Circular No. 2019-001)",
+        description: "Outlines operational procedures for the PNP Anti-Cybercrime Group to investigate and address cybercrimes.",
+        scenario: "A social media page spreads false information causing public panic, investigated by the PNP ACG.",
+        punishment: "Cybercrime penalties include imprisonment of prision mayor (6 years and 1 day to 12 years) and fines, per relevant laws.",
+        image: "https://images.app.goo.gl/Nt5MrE1TZcHvjAi79",
+        pdf: "https://napolcom.gov.ph/pdf/MC2019-001.pdf"
+    },
+    {
+        title: "Rules on Cybercrime Warrants (Supreme Court A.M. No. 17-11-03-SC)",
+        description: "Outlines procedures for obtaining and executing cybercrime warrants, including search, seizure, and data disclosure.",
+        scenario: "Law enforcement uses a Warrant to Disclose Computer Data to obtain a fraud suspect’s online activity from an ISP.",
+        punishment: "Non-compliance or obstruction penalized under the Cybercrime Prevention Act, with imprisonment of 6 to 12 years and fines of ₱200,000 or more.",
+        image: "https://elegal.ph/site/wp-content/uploads/2018/07/security.jpg",
+        pdf: "https://wipolex-resources-eu-central-1-358922420655.s3.amazonaws.com/edocs/lexdocs/laws/en/ph/ph208en_1.pdf"
+    },
+    {
+        title: "Rules on Electronic Evidence (Supreme Court A.M. No. 01-7-01-SC)",
+        description: "Establishes the admissibility of electronic signatures and documents in legal proceedings, requiring proper authentication.",
+        scenario: "An electronically signed contract in an email is admitted as evidence after verifying the signer’s control and signature integrity.",
+        punishment: "Exclusion of unauthenticated evidence. False information may lead to perjury or fraud charges.",
+        image: "https://s3.ap-south-1.amazonaws.com/novojuris/image/1603091279991_it__1_.jpg",
+        pdf: "https://www.doj.gov.ph/files/rules%20on%20electronic%20evidence.pdf"
+    },
+    {
+        title: "Revised Rules of Civil Procedure (Supreme Court A.M. No. 19-08-06-SC)",
+        description: "Outlines procedures for PCC administrative searches and inspections to investigate violations of the Philippine Competition Act.",
+        scenario: "A dispute over property or debt within a first-level court’s jurisdiction follows revised procedural rules.",
+        punishment: "Fines, compliance orders, or payment of attorney’s fees and expenses for procedural violations.",
+        image: "https://cdn.sanity.io/images/anl9abaw/production/cca237f4771a8e6802e1f4bf490ca2b827268c84-768x512.png?w=3840&q=75&fit=clip&auto=format",
+        pdf: "https://lpr.adb.org/sites/default/files/2024-07/philippines-supreme-court-19-08-06.pdf"
+    },
+    {
+        title: "Rule on Cybercrime Investigation (Supreme Court A.M. No. 17-11-03-SC)",
+        description: "Outlines procedures for obtaining and executing cybercrime warrants, including search, seizure, and data disclosure (same as Rules on Cybercrime Warrants).",
+        scenario: "Police secure a warrant to intercept data from a suspect’s device in a cyber fraud investigation.",
+        punishment: "Non-compliance penalized under the Cybercrime Prevention Act, with imprisonment of 6 to 12 years and fines of ₱200,000 or more.",
+        image: "https://elegal.ph/site/wp-content/uploads/2018/07/security.jpg",
+        pdf: "https://wipolex-resources-eu-central-1-358922420655.s3.amazonaws.com/edocs/lexdocs/laws/en/ph/ph208en_1.pdf"
+    },
+    {
+        title: "Guidelines on Consumer Protection in E-Commerce (DTI Department Order No. 18-05)",
+        description: "Ensures consumer protection in e-commerce through rules on transparency, fair practices, and post-purchase services.",
+        scenario: "A consumer receives a product significantly different from its online description, violating transparency requirements.",
+        punishment: "Fines, permit revocation, or legal action for deceptive practices. Criminal charges possible for fraud.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIiIwRhqssOUqs0rWBTlk3HZBcUKp29_Dxig&s",
+        pdf: "https://dtiwebfiles.s3-ap-southeast-1.amazonaws.com/Laws+and+Policies/DTi+Compendium+laws/Private+Emission+Testing+Centers/Department+Administative+Order+18-05.pdf"
+    }
+];
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const currentUser = {
+                    username: user.displayName || 'User',
+                    email: user.email,
+                    createdAt: user.metadata.creationTime
+                };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                usernameDisplay.textContent = `${currentUser.username}`;
+                emailDisplay.textContent = `${currentUser.email}`;
+                createdAtDisplay.textContent = `${new Date(currentUser.createdAt).toLocaleString()}`;
+
+                const sanitizedEmail = currentUser.email.replace(/\./g, ',');
+
+                const userRef = database.ref(`users/${sanitizedEmail}`);
+                userRef.once('value', (snapshot) => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        if (userData.avatarUrl) {
+                            profilePic.src = userData.avatarUrl;
+                        } else {
+                            profilePic.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/4L1mGQAAAAASUVORK5CYII=';
+                        }
+                        if (userData.avatarBgColor) {
+                            profilePic.style.backgroundColor = userData.avatarBgColor;
+                            avatarBgColorPicker.value = userData.avatarBgColor;
+                        }
+                        if (userData.borderColor) {
+                            profilePic.style.borderColor = userData.borderColor;
+                            borderColorPicker.value = userData.borderColor;
+                        }
+                        if (userData.borderType) {
+                            profilePic.style.borderStyle = userData.borderType;
+                            borderTypeSelect.value = userData.borderType;
+                        }
+                    }
+                }, (error) => {
+                    console.error('Error loading user customization:', error);
+                    alert('Failed to load user customization: ' + error.message);
+                });
+            } else {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        profilePic.addEventListener('click', () => {
+            customizationMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!customizationMenu.contains(e.target) && e.target !== profilePic) {
+                customizationMenu.classList.remove('active');
+            }
+        });
+
+        avatarInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            const maxSize = 2 * 1024 * 1024;
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload a valid image (JPG, JPEG, PNG).');
+                return;
+            }
+            if (file.size > maxSize) {
+                alert('Image size must be less than 2MB.');
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert('You must be logged in to upload an avatar.');
+                avatarLoading.classList.remove('active');
+                return;
+            }
+
+            avatarLoading.classList.add('active');
+
+            const img = new Image();
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const maxDimension = 300;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxDimension) {
+                        height = Math.round((height * maxDimension) / width);
+                        width = maxDimension;
+                    }
+                } else {
+                    if (height > maxDimension) {
+                        width = Math.round((width * maxDimension) / height);
+                        height = maxDimension;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    if (!currentUser || !currentUser.email) {
+                        alert('User not logged in.');
+                        avatarLoading.classList.remove('active');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('file', blob);
+                    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    formData.append('folder', `avatars/${currentUser.email}`);
+
+                    fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => {
+                                let errorMessage = `Cloudinary upload failed with status ${response.status}`;
+                                try {
+                                    const parsed = JSON.parse(text);
+                                    errorMessage = parsed.error?.message || text;
+                                } catch (e) {
+                                    errorMessage = text.includes('Invalid cloud name')
+                                        ? 'Invalid Cloudinary cloud name. Please check the CLOUDINARY_CLOUD_NAME.'
+                                        : text.includes('Invalid upload preset')
+                                        ? 'Invalid upload preset. Please check the preset name in Cloudinary.'
+                                        : text.includes('Unsigned uploads are not allowed')
+                                        ? 'Unsigned uploads are not allowed. Please set the upload preset to Unsigned in Cloudinary.'
+                                        : text || 'Unknown error occurred';
+                                }
+                                throw new Error(errorMessage);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.error.message || 'Failed to upload image to Cloudinary');
+                        }
+
+                        const avatarUrl = data.secure_url;
+                        const sanitizedEmail = currentUser.email.replace(/\./g, ',');
+
+                        database.ref(`users/${sanitizedEmail}`).update({
+                            avatarUrl: avatarUrl,
+                            updatedAt: firebase.database.ServerValue.TIMESTAMP
+                        })
+                        .then(() => {
+                            profilePic.src = avatarUrl;
+                            avatarLoading.classList.remove('active');
+                        })
+                        .catch(error => {
+                            console.error('Error saving avatar URL to Firebase:', error);
+                            alert('Failed to save avatar URL to Firebase: ' + error.message);
+                            avatarLoading.classList.remove('active');
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error uploading avatar to Cloudinary:', error);
+                        alert(`Failed to upload avatar to Cloudinary: ${error.message}`);
+                        avatarLoading.classList.remove('active');
+                    });
+                }, file.type, 0.6);
+            };
+            img.onerror = () => {
+                alert('Failed to process the image. Please try a different file.');
+                avatarLoading.classList.remove('active');
+            };
+        });
+
+        avatarBgColorPicker.addEventListener('change', () => {
+            const color = avatarBgColorPicker.value;
+            profilePic.style.backgroundColor = color;
+
+            const user = auth.currentUser;
+            if (user) {
+                const sanitizedEmail = user.email.replace(/\./g, ',');
+                database.ref(`users/${sanitizedEmail}`).update({
+                    avatarBgColor: color,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                })
+                .catch(error => {
+                    console.error('Error saving avatar background color:', error);
+                    alert('Failed to save avatar background color: ' + error.message);
+                });
+            } else {
+                alert('You must be logged in to change the avatar background color.');
+            }
+        });
+
+        borderColorPicker.addEventListener('change', () => {
+            const color = borderColorPicker.value;
+            profilePic.style.borderColor = color;
+
+            const user = auth.currentUser;
+            if (user) {
+                const sanitizedEmail = user.email.replace(/\./g, ',');
+                database.ref(`users/${sanitizedEmail}`).update({
+                    borderColor: color,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                })
+                .catch(error => {
+                    console.error('Error saving border color:', error);
+                    alert('Failed to save border color: ' + error.message);
+                });
+            } else {
+                alert('You must be logged in to change the border color.');
+            }
+        });
+
+        borderTypeSelect.addEventListener('change', () => {
+            const borderType = borderTypeSelect.value;
+            profilePic.style.borderStyle = borderType;
+
+            const user = auth.currentUser;
+            if (user) {
+                const sanitizedEmail = user.email.replace(/\./g, ',');
+                database.ref(`users/${sanitizedEmail}`).update({
+                    borderType: borderType,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                })
+                .catch(error => {
+                    console.error('Error saving border type:', error);
+                    alert('Failed to save border type: ' + error.message);
+                });
+            } else {
+                alert('You must be logged in to change the border type.');
+            }
+        });
 
         if (localStorage.getItem('darkTheme') === 'enabled') {
             body.classList.add('dark-theme');
@@ -839,12 +2011,11 @@
         document.querySelectorAll('a[href]').forEach(link => {
             if (link.href && !link.href.startsWith('javascript:') && !link.href.startsWith('#')) {
                 link.addEventListener('click', function(e) {
-
                     if (!this.href.includes(window.location.hostname)) return;
-                    
+
                     e.preventDefault();
                     loaderOverlay.classList.add('active');
-                    
+
                     setTimeout(() => {
                         window.location.href = this.href;
                     }, 150);
@@ -852,48 +2023,259 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = Array.from(document.querySelectorAll('.card'));
+        // Function to save law to Firebase
+        function saveLaw(lawTitle) {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('You must be logged in to save a law.');
+                return;
+            }
 
-            const list = cards.map(card => ({
-                title: card.dataset.title,
-                element: card
-            }));
-
-            const fuse = new Fuse(list, {
-                keys: ['title'],
-                threshold: 0.4,      
-                distance: 100
+            const sanitizedEmail = user.email.replace(/\./g, ',');
+            const lawRef = database.ref(`users/${sanitizedEmail}/savedLaws`).push();
+            lawRef.set({
+                title: lawTitle,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            })
+            .then(() => {
+                alert('Law saved successfully!');
+            })
+            .catch(error => {
+                console.error('Error saving law:', error);
+                alert('Failed to save law: ' + error.message);
             });
+        }
 
-            const input = document.getElementById('searchInput');
-            const container = document.getElementById('cardsContainer');
+        // Function to fetch laws from AI API (placeholder)
+        async function fetchLawsFromAI(query) {
+            // Replace this with a real free AI API endpoint
+            const AI_API_URL = 'https://hypothetical-ai-api.com/classify-laws'; // Placeholder
+            const AI_API_KEY = 'your-api-key'; // Replace with actual API key
 
-            input.addEventListener('input', () => {
-                const query = input.value.trim();
+            try {
+                const response = await fetch(AI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AI_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        laws: laws.map(law => ({
+                            title: law.title,
+                            description: law.description,
+                            scenarios: law.scenarios
+                        }))
+                    })
+                });
 
-                if (!query) {
-                    cards.forEach(card => {
-                        card.classList.remove('hidden', 'highlight');
-                        card.style.order = '';
-                    });
-                    return;
+                if (!response.ok) {
+                    throw new Error('Failed to fetch laws from AI API');
                 }
 
-                const results = fuse.search(query);
-
-                cards.forEach(card => {
-                    card.classList.add('hidden');
-                    card.classList.remove('highlight');
+                const data = await response.json();
+                return {
+                    mainLaw: data.mainLaw, // Expected to return the title of the main law
+                    alternativeLaws: data.alternativeLaws // Expected to return an array of 4 alternative law titles
+                };
+            } catch (error) {
+                console.error('Error fetching laws from AI:', error);
+                // Fallback to local fuzzy search if AI API fails
+                const fuse = new Fuse(laws, {
+                    keys: ['title', 'description', 'scenarios'],
+                    threshold: 0.4,
+                    distance: 100
                 });
 
-                results.forEach((res, index) => {
-                    const card = res.item.element;
-                    card.classList.remove('hidden');
-                    card.classList.add('highlight');
-                    card.style.order = -index;
+                const results = fuse.search(query);
+                const mainLaw = results[0]?.item.title;
+                const alternativeLaws = results.slice(1, 5).map(res => res.item.title);
+
+                return { mainLaw, alternativeLaws };
+            }
+        }
+
+        // Function to render law cards
+        function renderLawCards(mainLawTitle, alternativeLawTitles) {
+            cardsContainer.innerHTML = '';
+
+            // Render main law (wide card)
+            const mainLaw = laws.find(law => law.title === mainLawTitle);
+            if (mainLaw) {
+                const mainCard = document.createElement('div');
+                mainCard.className = 'card main-law';
+                mainCard.innerHTML = `
+                    <div class="image_container">
+                        <img src="${mainLaw.image}" alt="Law Image">
+                    </div>
+                    <div class="cybercrime-title">
+                        <span>${mainLaw.title}</span>
+                    </div>
+                    <div class="cybercrime-description">
+                        <p>${mainLaw.description}</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <a href="${mainLaw.pdf}" class="border-button" target="_blank">
+                            <span class="button-text">Read PDF</span>
+                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>
+                        </a>
+                        <button class="save-button" data-title="${mainLaw.title}">
+                            <span class="button-text">Save Law</span>
+                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 3H7a2 2 0 0 0-2 2v16l7-4 7 4V5a2 2 0 0 0-2-2z" fill="currentColor"></path></svg></span>
+                        </button>
+                    </div>
+                `;
+                cardsContainer.appendChild(mainCard);
+            }
+
+            // Render alternative laws (4 smaller cards)
+            const alternativesSection = document.createElement('div');
+            alternativesSection.innerHTML = '<h2>Alternative Laws Suggested</h2>';
+            alternativesSection.style.width = '100%';
+            alternativesSection.style.textAlign = 'center';
+            alternativesSection.style.marginTop = '40px';
+            cardsContainer.appendChild(alternativesSection);
+
+            const alternativesContainer = document.createElement('div');
+            alternativesContainer.className = 'cards-container';
+            alternativeLawTitles.forEach(title => {
+                const law = laws.find(l => l.title === title);
+                if (law) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="image_container">
+                            <img src="${law.image}" alt="Law Image">
+                        </div>
+                        <div class="cybercrime-title">
+                            <span>${law.title}</span>
+                        </div>
+                        <div class="cybercrime-description">
+                            <p>${law.description}</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <a href="${law.pdf}" class="border-button" target="_blank">
+                                <span class="button-text">Read PDF</span>
+                                <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>
+                            </a>
+                            <button class="save-button" data-title="${law.title}">
+                                <span class="button-text">Save Law</span>
+                                <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 3H7a2 2 0 0 0-2 2v16l7-4 7 4V5a2 2 0 0 0-2-2z" fill="currentColor"></path></svg></span>
+                            </button>
+                        </div>
+                    `;
+                    alternativesContainer.appendChild(card);
+                }
+            });
+            cardsContainer.appendChild(alternativesContainer);
+
+            // Add event listeners to save buttons
+            document.querySelectorAll('.save-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const lawTitle = button.getAttribute('data-title');
+                    saveLaw(lawTitle);
                 });
             });
+        }
+
+        // Initial render of default cards (optional)
+     const defaultCards = [
+    {
+        title: "UN: Asian Scam Calls Now a Global Export",
+        image: "https://regmedia.co.uk/2023/09/20/shutterstock_call_center.jpg",
+        description: "A new report from the United Nations Office on Drugs and Crime (UNODC) warns that scam calls originating in Asia have become a global problem, fueled by organized crime networks that have turned fraud into a multi-billion-dollar industry."
+    },
+    {
+        title: "UN: Global Expansion of Southeast Asian Cyber-Fraud Operations Underway",
+        image: "https://c-assets.papillon.io/image/fetch/s--YnOMApIW--/f_auto/https://dkf1ato8y5dsg.cloudfront.net/uploads/8/79/1000x1000-global-threat-report.jpg",
+        description: "The United Nations Office on Drugs and Crime (UNODC) released a report detailing the alarming global expansion of Southeast Asian cyber-fraud operations, which have evolved into a transnational organized crime threat affecting every continent."
+    },
+    {
+        title: "Southeast Asia Cyber Fraud at ‘Inflection Point’ as Scam Networks Go Global",
+        image: "https://cms.therecord.media/uploads/format_webp/large_myanmar_scam_arrest_07972d5702.jpg",
+        description: "A new United Nations report warns that cyber fraud originating in Southeast Asia has reached an 'inflection point,' with criminal networks expanding globally and generating billions in illicit profits, often through the exploitation of trafficked workers."
+    }
+];
+
+        defaultCards.forEach(cardData => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="image_container">
+                    <img src="${cardData.image}" alt="Cybercrime Image">
+                </div>
+                <div class="cybercrime-title">
+                    <span>${cardData.title}</span>
+                </div>
+                <div class="cybercrime-description">
+                    <p>Cybercrime</p>
+                    <p>${cardData.description}</p>
+                </div>
+                <a href="News.html" class="border-button">
+                    <span class="button-text">Read More</span>
+                    <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>
+                </a>
+            `;
+            cardsContainer.appendChild(card);
+        });
+
+        // Search functionality with AI integration
+        searchInput.addEventListener('input', async () => {
+            const query = searchInput.value.trim();
+
+            if (query) {
+                fingerprintIcon.classList.add('scanning');
+                sectionTitle.textContent = 'RELEVANT LAWS';
+                loaderOverlay.classList.add('active');
+
+                const user = auth.currentUser;
+                if (user) {
+                    const sanitizedEmail = user.email.replace(/\./g, ',');
+                    database.ref(`users/${sanitizedEmail}/searchHistory`).push({
+                        query: query,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+
+                try {
+                    const { mainLaw, alternativeLaws } = await fetchLawsFromAI(query);
+                    if (mainLaw && alternativeLaws) {
+                        renderLawCards(mainLaw, alternativeLaws);
+                    } else {
+                        cardsContainer.innerHTML = '<p>No relevant laws found.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error in search:', error);
+                    cardsContainer.innerHTML = '<p>Error fetching laws. Please try again.</p>';
+                } finally {
+                    loaderOverlay.classList.remove('active');
+                }
+            } else {
+                fingerprintIcon.classList.remove('scanning');
+                sectionTitle.textContent = 'TOP ARTICLES';
+                cardsContainer.innerHTML = '';
+                defaultCards.forEach(cardData => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="image_container">
+                            <img src="${cardData.image}" alt="Cybercrime Image">
+                        </div>
+                        <div class="cybercrime-title">
+                            <span>${cardData.title}</span>
+                        </div>
+                        <div class="cybercrime-description">
+                            <p>Cybercrime</p>
+                            <p>${cardData.description}</p>
+                        </div>
+                        <a href="News.html" class="border-button">
+                            <span class="button-text">Read More</span>
+                            <span class="iconer"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path></svg></span>
+                        </a>
+                    `;
+                    cardsContainer.appendChild(card);
+                });
+            }
         });
     </script>
 </body>
